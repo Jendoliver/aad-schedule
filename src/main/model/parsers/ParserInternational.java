@@ -20,6 +20,7 @@ public class ParserInternational extends Parser
 	
 	public ParserInternational(String fileToParse, boolean isInput) {
 		this.fileToParse = fileToParse;
+		this.isInput = isInput;
 	}
 
 	public void parse() 
