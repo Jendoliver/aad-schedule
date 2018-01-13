@@ -4,9 +4,9 @@ install: true
 jdk:
   - oraclejdk8
 script:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then gradle clean -PbranchTests=junit.**; fi
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then gradle clean -PbranchTests=junit.**; fi
-  - if [ "$TRAVIS_BRANCH" = "irene" ]; then gradle clean -PbranchTests=junit.irene.*; fi
-  - if [ "$TRAVIS_BRANCH" = "jendoliver" ]; then gradle clean -PbranchTests=junit.jendoliver.*; fi
-  - if [ "$TRAVIS_BRANCH" = "magner" ]; then gradle clean -PbranchTests=junit.magner.*; fi
-  - if [ "$TRAVIS_BRANCH" = "raikish" ]; then gradle clean -PbranchTests=junit.raikish.*; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then gradle clean -PbranchTests=junit.**; gradle build -PbranchTests=junit.**; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then gradle clean -PbranchTests=junit.**; gradle build -PbranchTests=junit.**; fi
+  - if [ "$TRAVIS_BRANCH" = "irene" ]; then gradle clean -PbranchTests=junit.irene.*; gradle build -PbranchTests=junit.irene.*; fi
+  - if [ "$TRAVIS_BRANCH" = "jendoliver" ]; then gradle clean -PbranchTests=junit.jendoliver.*; then gradle build -PbranchTests=junit.jendoliver.*; fi
+  - if [ "$TRAVIS_BRANCH" = "magner" ]; then gradle clean -PbranchTests=junit.magner.*; gradle build -PbranchTests=junit.magner.*; fi
+  - if [ "$TRAVIS_BRANCH" = "raikish" ]; then gradle clean -PbranchTests=junit.raikish.*; gradle build -PbranchTests=junit.raikish.*; fi
