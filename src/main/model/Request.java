@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class Request
 		public int startHour;
 		public int endHour;
 		
-		private HourFrame() { }
+		public HourFrame() { }
 	}
 	
 	public class DayFrame
@@ -29,8 +30,8 @@ public class Request
 	public String activityName;
 	public String roomName;
 	public DayFrame dayFrame;
-	public List<HourFrame> hourFrames;
-	public List<RequestDays> requestedDays;
+	public List<HourFrame> hourFrames = new ArrayList<>();
+	public List<RequestDays> requestedDays = new ArrayList<>();
 	
 	public Request() { }
 }
