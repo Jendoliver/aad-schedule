@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="junit.magner.ParserConfigTests" tests="1" skipped="0" failures="1" errors="0" timestamp="2018-01-13T18:22:27" hostname="DESKTOP-BPQVPMR" time="0.005">
+<testsuite name="junit.magner.ParserConfigTests" tests="1" skipped="0" failures="1" errors="0" timestamp="2018-01-13T20:58:21" hostname="DESKTOP-BPQVPMR" time="0.006">
   <properties/>
-  <testcase name="parseTest" classname="junit.magner.ParserConfigTests" time="0.005">
+  <testcase name="parseTest" classname="junit.magner.ParserConfigTests" time="0.006">
     <failure message="java.lang.AssertionError: expected:&lt;2018&gt; but was:&lt;null&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;2018&gt; but was:&lt;null&gt;
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:743)
