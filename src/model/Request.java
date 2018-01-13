@@ -16,7 +16,7 @@ public class Request
 		public int startHour;
 		public int endHour;
 		
-		private HourFrame() { }
+		public HourFrame() { }
 	}
 	
 	public class DayFrame

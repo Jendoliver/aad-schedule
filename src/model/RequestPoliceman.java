@@ -7,7 +7,7 @@ package model;
  * Recive RequestList bien formateado del ParserRequests para validar:
  * 
  *  - Que los RequestDays de cada request tengan sentido respecto a la franja de dias de la misma
- *  - 
+ *  - Que no se solapen request, si hay una request en el month
  * 
  * @author Jandol
  * @author Raikish
