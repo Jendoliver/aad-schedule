@@ -6,6 +6,7 @@ import java.util.Date;
 import globals.CalendarInfo;
 import globals.Configuration;
 import globals.Constants;
+import globals.InputStrings;
 import model.OutputGenerator;
 import model.RequestList;
 import model.RequestPoliceman;
@@ -27,8 +28,6 @@ public class App
 		ParserConfig parserConfig = new ParserConfig(Constants.FileNames.CONFIG);
 		parserConfig.parse();
 		
-		System.out.println(Configuration.MONTH_TO_PROCESS);
-		/*
 		// Parse an international file with INPUT_LANG extension and set InputStrings values
 		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE + Configuration.INPUT_LANG, true);
 		parserInternational.parse();
@@ -59,6 +58,6 @@ public class App
 		OutputGenerator outputGenerator = new OutputGenerator();
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
 		outputGenerator.print(processedRequestList);
-		*/
+		
 	}
 }
