@@ -35,7 +35,7 @@ public class ParserInternational extends Parser
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
 					String[] configEntry = sCurrentLine.split(";");
-					if(configEntry[0].equalsIgnoreCase("003")) //003 -> Days code
+					if(configEntry[0].equalsIgnoreCase("003")) //003 -> Days code 
 					{
 		                parameters = configEntry[1].split(",");
 		                InputStrings.MONDAY = parameters[0];

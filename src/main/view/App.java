@@ -1,12 +1,10 @@
 package view;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import globals.CalendarInfo;
 import globals.Configuration;
 import globals.Constants;
-import globals.InputStrings;
 import model.OutputGenerator;
 import model.RequestList;
 import model.RequestPoliceman;
