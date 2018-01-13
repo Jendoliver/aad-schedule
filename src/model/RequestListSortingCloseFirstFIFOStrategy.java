@@ -1,8 +1,9 @@
 package model;
 
+import globals.Configuration;
+import globals.InputStrings;
+
 /**
- * 
- * 
  *  Observacions sobre el fitxer peticions.txt:
 	a) Les activitats s’assignen per ordre d’aparició.
 	En cas de conflicte, s’afegeix la informació de les peticions no assignades en un fitxer
@@ -27,12 +28,34 @@ package model;
 public class RequestListSortingCloseFirstFIFOStrategy implements RequestListSortingStrategy 
 {
 	@Override
-	public RequestList sort(RequestList requestList) {
-		// TODO Auto-generated method stub
+	public RequestList sort(RequestList requestList) 
+	{
 		
-		// Crear new RequestList
-		// recorrer requestList original buscando CLOSE y ponerlas primeras en la nueva: las encontradas se borran de la original
+		RequestList newRequestList = new RequestList();
+		String activityNameComparator  = "Cerrado" /* InputStrings.CLOSE_KEY */;
+		RequestList auxiliarRequestTest = new RequestList();
+		auxiliarRequestTest = (RequestList) requestList.clone();
 		
-		return null;
+		while(!requestList.isEmpty()) {
+			for (Request request : auxiliarRequestTest) 
+			{
+				if(request.activityName.equals(activityNameComparator)) 
+				{
+					newRequestList.add(request);
+					requestList.remove(request);
+				}		
+			}
+			//cambiar la activitynameComparator por el siguiente
+			if(!requestList.isEmpty())
+			{
+				activityNameComparator = requestList.get(0).activityName;
+			}
+		}
+		for (Request request : newRequestList)
+		{
+			System.out.println(request.activityName);
+		}
+		
+		return newRequestList;
 	}
 }
