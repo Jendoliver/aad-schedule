@@ -1,7 +1,6 @@
 package view;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import globals.CalendarInfo;
 import globals.Configuration;
@@ -57,5 +56,6 @@ public class App
 		OutputGenerator outputGenerator = new OutputGenerator();
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
 		outputGenerator.print(processedRequestList);
+		
 	}
 }
