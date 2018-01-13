@@ -22,9 +22,10 @@ public class ParserConfig extends Parser
 	public void parse()  // Parse fileToParse and fill Configuration
 	{
 		String[] configEntry;
+		BufferedReader br = null;
 		try 
 		{
-			BufferedReader br = new BufferedReader(new FileReader(fileToParse));
+			br = new BufferedReader(new FileReader(fileToParse));
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) 
 			{
@@ -46,11 +47,16 @@ public class ParserConfig extends Parser
 					default:
 						break;
 				}
-				br.close();
             }
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

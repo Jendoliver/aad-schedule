@@ -24,12 +24,13 @@ public class ParserInternational extends Parser
 
 	public void parse() 
 	{
+		BufferedReader br = null;
 		String[] parameters;
 		if(isInput) // Parse fileToParse and fill InputStrings (003,005)
 		{
 			try 
 			{
-				BufferedReader br = new BufferedReader(new FileReader(fileToParse));
+				br = new BufferedReader(new FileReader(fileToParse));
 				String sCurrentLine;
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
@@ -49,18 +50,23 @@ public class ParserInternational extends Parser
 					{
 						InputStrings.CLOSE_KEY = configEntry[1];
 					}
-					br.close();
 	            }
 			} catch (IOException e) {
 				e.printStackTrace();
-			} 
+			} finally {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		else // Parse fileToParse and fill OutputStrings(001, 002, 004)
 		{
 			try 
 			{
-				BufferedReader br = new BufferedReader(new FileReader(fileToParse));
+				br = new BufferedReader(new FileReader(fileToParse));
 				String sCurrentLine;
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
@@ -97,9 +103,14 @@ public class ParserInternational extends Parser
 						OutputStrings.Months.DECEMBER=parameters[11];
 					}
 	            }
-				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
