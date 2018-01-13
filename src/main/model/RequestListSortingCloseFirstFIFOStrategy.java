@@ -32,7 +32,7 @@ public class RequestListSortingCloseFirstFIFOStrategy implements RequestListSort
 	{
 		
 		RequestList newRequestList = new RequestList();
-		String activityNameComparator  = "Cerrado" /* InputStrings.CLOSE_KEY */;
+		String activityNameComparator  = InputStrings.CLOSE_KEY;
 		RequestList auxiliarRequestTest = new RequestList();
 		auxiliarRequestTest = (RequestList) requestList.clone();
 		
