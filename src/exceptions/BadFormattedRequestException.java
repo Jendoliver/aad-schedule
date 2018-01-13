@@ -19,6 +19,12 @@ public class BadFormattedRequestException extends Exception
 		DAY_MASK_TOO_MANY_ARGS("The day mask has more than 7 days."),
 		DAY_MASK_REPEATED_DAY("The day mask has a repeated day."),
 		HOUR_FRAME_TOO_SMALL("The hour frames have to be at least one hour long."),
+		HOUR_FRAME_FORMAT_INCORRECT("The hour frames are not well formated"),
+		HOUR_FORMAT_INCORRECT("The hour format is not correct. Only two digits allowed."),
+		DAY_FORMAT_INCORRECT("The input day for the date is incorrect"),
+		FORMAT_INCORRECT("Only digits allowed."),
+		MONTH_OUT_OF_BOUNDS("Requested month not included."),
+		YEAR_OUT_OF_BOUNDS("Requested month not included."),
 		TOO_MANY_HOUR_FRAMES("Too many hour frames were provided (max number: " + Constants.MAX_HOUR_FRAME_NUM + ")");
 	
 		private String msg;
