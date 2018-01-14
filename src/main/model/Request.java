@@ -34,4 +34,7 @@ public class Request
 	public List<RequestDays> requestedDays = new ArrayList<>();
 	
 	public Request() { }
+	
+	// Used to make tests easier on RequestListTests
+	public Request(String activityName) { this.activityName = activityName; }
 }
