@@ -40,7 +40,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			.append(OutputStrings.Days.SATURDAY).append("</th></thead>");
 	}
 	
-	// TODO make moar beatifult
+	// TODO make moar beatiful
 	private void printNonMonthDays(int num)
 	{/*
 		for(int i = 0; i < num; i++) {
