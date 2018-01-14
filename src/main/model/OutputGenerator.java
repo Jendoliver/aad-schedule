@@ -20,8 +20,8 @@ public class OutputGenerator
 		this.strategy = strategy;
 	}
 	
-	public void print(Map<String, RoomSchedule> requestList)
+	public void print(Map<String, RoomSchedule> roomSchedules)
 	{
-		strategy.print(requestList);
+		strategy.print(roomSchedules);
 	}
 }

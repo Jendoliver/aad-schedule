@@ -20,7 +20,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private StringBuilder output = new StringBuilder();
 	
 	@Override
-	public void print(Map<String, RoomSchedule> requestList) 
+	public void print(Map<String, RoomSchedule> roomSchedules) 
 	{
 		output.append("<table>");
 		printHeader();

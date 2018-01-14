@@ -10,5 +10,5 @@ import java.util.Map;
  */
 public interface OutputGeneratorStrategy 
 {
-	void print(Map<String, RoomSchedule> requestList);
+	void print(Map<String, RoomSchedule> roomSchedules);
 }

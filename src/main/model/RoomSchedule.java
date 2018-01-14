@@ -14,13 +14,12 @@ import globals.CalendarInfo;
  * @author Raikish
  *
  */
-public class RoomSchedule 
+public class RoomSchedule extends HashMap<Integer, Map<Integer, Request>>
 {
-	private Map<Integer, Map<Integer, Request>> grid; 
+	private static final long serialVersionUID = -1059395778728811368L;
 		
 	public RoomSchedule() 
 	{ 
-		grid = new HashMap<>(); 
 		init(); 
 	}
 	
@@ -29,17 +28,12 @@ public class RoomSchedule
 		// Generates the main keys from the schedule, the months (1-12)
 		for (int i = 1; i <= CalendarInfo.MONTH_DAY_NUM; i++) 
 		{
-			grid.put(i, new HashMap<>());
+			put(i, new HashMap<>());
 			
 			// Generates 24 hour keys for each month (0-23)
 			for(int j = 0; j < 24; j++) 
-				grid.get(i).put(j, null);
+				get(i).put(j, null);
 		}
-	}
-	
-	public Map<Integer, Map<Integer, Request>> getGrid() 
-	{
-		return grid;
 	}
 	
 	/**
@@ -51,6 +45,6 @@ public class RoomSchedule
 	 */
 	public boolean isEmptyHourFrame(int day, int beginningHour) 
 	{
-		return grid.get(day).get(beginningHour).equals(null);
+		return get(day).get(beginningHour).equals(null);
 	}
 }

@@ -17,6 +17,7 @@ public class Request
 		public int endHour;
 		
 		public HourFrame() { }
+		public HourFrame(int startHour, int endHour) { this.startHour = startHour; this.endHour = endHour; }
 	}
 	
 	public class DayFrame
