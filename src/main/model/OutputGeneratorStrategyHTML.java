@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Map;
+
 import globals.CalendarInfo;
 import globals.OutputStrings;
 
@@ -18,7 +20,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private StringBuilder output = new StringBuilder();
 	
 	@Override
-	public void print(RequestList requestList) 
+	public void print(Map<String, RoomSchedule> requestList) 
 	{
 		output.append("<table>");
 		printHeader();

@@ -1,6 +1,7 @@
 package view;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import globals.CalendarInfo;
 import globals.Configuration;
@@ -8,6 +9,7 @@ import globals.Constants;
 import model.OutputGenerator;
 import model.RequestList;
 import model.RequestPoliceman;
+import model.RoomSchedule;
 import model.parsers.ParserConfig;
 import model.parsers.ParserInternational;
 import model.parsers.ParserRequests;
@@ -50,12 +52,14 @@ public class App
 		requestList = requestList.sort();
 		
 		// Investigate the collisions of the requests and solve them
-		RequestList processedRequestList = RequestPoliceman.process(requestList);
+		RequestPoliceman requestPoliceman = new RequestPoliceman();
+		requestPoliceman.process(requestList);
+		Map<String, RoomSchedule> roomSchedules = requestPoliceman.getRoomSchedules();
 		
 		// Print the calendar
 		OutputGenerator outputGenerator = new OutputGenerator();
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
-		outputGenerator.print(processedRequestList);
+		outputGenerator.print(roomSchedules);
 		
 	}
 }

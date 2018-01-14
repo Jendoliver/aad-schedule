@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Map;
+
 /**
  * This class is responsible for executing its OutputGeneratorStrategy, which is set in the configuration file.
  * The default strategy is HTML.
@@ -18,7 +20,7 @@ public class OutputGenerator
 		this.strategy = strategy;
 	}
 	
-	public void print(RequestList requestList)
+	public void print(Map<String, RoomSchedule> requestList)
 	{
 		strategy.print(requestList);
 	}

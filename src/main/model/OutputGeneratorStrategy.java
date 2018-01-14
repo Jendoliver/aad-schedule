@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Map;
+
 /**
  * The functional interface for the OutputGenerator different strategies
  * 
@@ -8,5 +10,5 @@ package model;
  */
 public interface OutputGeneratorStrategy 
 {
-	void print(RequestList requestList);
+	void print(Map<String, RoomSchedule> requestList);
 }
