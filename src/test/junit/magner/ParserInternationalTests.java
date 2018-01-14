@@ -43,7 +43,7 @@ public class ParserInternationalTests
 		assertEquals("Martes", OutputStrings.Days.TUESDAY);
 		assertEquals("Miercoles", OutputStrings.Days.WEDNESDAY);
 		assertEquals("Jueves", OutputStrings.Days.THURSDAY);
-		assertEquals("Vienes", OutputStrings.Days.FRIDAY);
+		assertEquals("Viernes", OutputStrings.Days.FRIDAY);
 		assertEquals("Sabado", OutputStrings.Days.SATURDAY);
 		assertEquals("Domingo", OutputStrings.Days.SUNDAY);
 		
