@@ -7,13 +7,9 @@ import globals.CalendarInfo;
 
 public class MonthToProcess 
 {
-	// Map<Dias, FranjasHorarias>
-	private Map<Integer, Map<Integer, Request>> grid;
-	
-	// TODO initialise
-	// canelo
-	// inicializa aqui hasta 28 (27) y en el ParserConfig anade los dias que PUEDEN faltar
-	
+	// Map<Dias, FranjasHorarias> 
+	private Map<Integer, Map<Integer, Request>> grid; 
+		
 	private void init()
 	{
 		for (int i=0; i < CalendarInfo.MONTH_DAY_NUM; i++) {
