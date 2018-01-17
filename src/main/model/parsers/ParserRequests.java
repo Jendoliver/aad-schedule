@@ -1,10 +1,12 @@
 package model.parsers;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.chrono.IsoChronology;
+import java.util.ArrayList;
 
 import exceptions.BadFormattedRequestException;
 import exceptions.BadFormattedRequestException.Reason;
@@ -30,8 +32,6 @@ public class ParserRequests extends Parser {
 	}
 
 
-
-
 	public RequestList parse() {
 
 		String mainLine = "";
@@ -39,84 +39,100 @@ public class ParserRequests extends Parser {
 		Request request = new Request();
 		RequestList requestList = new RequestList();
 		int contador = 0;
+		String activityName;
+		String roomName;
+		String dayFrameStart;
+		String dayFrameFinish;
+		String dayMask;
+		String hourFrames;
+		boolean isEverythingCorrect;
+
 		try {
-			parserRequestReader = new BufferedReader(new FileReader(fileToParse));
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			parserRequestReader = new BufferedReader(new FileReader("request.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
 		}
 		try {
 			mainLine = parserRequestReader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}catch(NullPointerException e) {
+			System.out.println(e.getMessage());
 		}
 
 		while(mainLine != null) {
 			String[] mainLineSplited = mainLine.split(" ");
 			System.out.println("Request numero: " + contador);
 			contador++;
+			try {
+				//CHECK NUMBER OF ARGUMENTS
+				if(mainLineSplited.length == 6) {
 
-			//CHECK NUMBER OF ARGUMENTS
-			if(mainLineSplited.length == 6) {
+					//VALUES FROM MAIN LINE SPLITED
+					activityName = mainLineSplited[0];
+					roomName = mainLineSplited[1];
+					dayFrameStart = mainLineSplited[2];
+					dayFrameFinish = mainLineSplited[3];
+					dayMask = mainLineSplited[4];
+					hourFrames = mainLineSplited[5];
+					isEverythingCorrect = true;
 
-				//VALUES FROM MAIN LINE SPLITED
-				String activityName = mainLineSplited[0];
-				String roomName = mainLineSplited[1];
-				String dayFrameStart = mainLineSplited[2];
-				String dayFrameFinish = mainLineSplited[3];
-				String dayMask = mainLineSplited[4];
-				String hourFrames = mainLineSplited[5];
+					//ADDS ACTIVITY NAME AND ROOM NAME
+					request.activityName = activityName;
+					request.roomName = roomName;
 
-				String monthStart = null;
-				String yearStart = null;
-				String monthFinish = null;
-				String yearFinish = null;
-				Request.HourFrame hourFrameForRequest = null;
+					//CHECKS IF DAYFRAME IS CORRECT
+					String[] dayFrameStartSplited = dayFrameStart.split("/");
+					String[] dayFrameFinishSplited = dayFrameFinish.split("/");
 
-				//ADDS ACTIVITY NAME AND ROOM NAME
-				request.activityName = activityName;
-				request.roomName = roomName;
+					Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited);
+					if(isCorrectDayFrame != null) {
+						request.dayFrame = isCorrectDayFrame;
+					}else {
+						isEverythingCorrect = false;
+						throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
+					}
 
-				//CHECKS IF DAYFRAME IS CORRECT
-				String[] dayFrameStartSplited = dayFrameStart.split("/");
-				String[] dayFrameFinishSplited = dayFrameFinish.split("/");
-
-				Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited);
-				if(isCorrectDayFrame != null) {
-					request.dayFrame = isCorrectDayFrame;
-				}else {
-					//aqui error al log
-					System.out.println("dayframe incorrect");
-				}
-
-				//CHECKS IF THE DAYMASK IS CORRECT
-				//split("") will return an empty first value, so [0] doesn't count, start at 1
-				String[] dayMaskSplited = dayMask.split("");
-				if(dayMaskSplited.length <= 8 && dayMaskSplited.length > 0) {
-					for(String day : dayMaskSplited) {
-						if(day.equals(dayMaskSplited[0])) continue;
-						if(InputStrings.isValidDay(day)) {
-							request.requestedDays.add(InputStrings.toRequestDays(day));
-						}else {
-							//							throw new BadFormattedRequestException(Reason.DAY_MASK_INVALID_CHARACTER);
-							System.out.println("DayMask invalid character");
+					//CHECKS IF THE DAYMASK IS CORRECT
+					//split("") will return an empty first value, so [0] doesn't count, start at 1
+					String[] dayMaskSplited = dayMask.split("");
+					if(dayMaskSplited.length <= 8 && dayMaskSplited.length > 0) {
+						for(String day : dayMaskSplited) {
+							if(day.equals(dayMaskSplited[0])) continue;
+							if(InputStrings.isValidDay(day)) {
+								request.requestedDays.add(InputStrings.toRequestDays(day));
+							}else {
+								isEverythingCorrect = false;
+								throw new BadFormattedRequestException(Reason.DAY_MASK_INVALID_CHARACTER);
+							}
 						}
+					}else {
+						isEverythingCorrect = false;
+						throw new BadFormattedRequestException(Reason.DAY_MASK_TOO_MANY_ARGS);
+					}
+
+					//CHECKS IF THE HOURS REQUESTED ARE WELL FORMATED
+					if(checkHourFrame(hourFrames) != null) {
+						request.hourFrames = checkHourFrame(hourFrames);
+					}else {
+						isEverythingCorrect = false;
+					}
+
+					//IF EVERYTHING IS CORRECT ADDS THE REQUEST TO THE REQUEST LIST
+					if(isEverythingCorrect) {
+						requestList.add(request);
 					}
 				}else {
-					//					throw new BadFormattedRequestException(Reason.DAY_MASK_TOO_MANY_ARGS);
-					System.out.println("Request Days too many or not enough");
+					isEverythingCorrect = false;
+					throw new BadFormattedRequestException(Reason.ARGS);
 				}
-
-
-
-
-
+			}catch(BadFormattedRequestException ex) {
+				System.out.println(ex.getMessage());
 			}
 		}
-
 		return requestList;
 	}
 
-	//NUEVO
 
 	//CHECKS IF THE START AND END DAY ARE PLAUSIBLE AND IF THE MONTH AND YEAR ARE LIKE THE CONFIGURED ONES
 	Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish) {
@@ -172,104 +188,58 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE START AND END HOUR HAVE SENSE
-	public boolean checkHourFrame(String[] startAndEndHour){
-		boolean isCorrect = false;
-		if(startAndEndHour.length == 2) {
-			//			try {
-			String startHour = startAndEndHour[0];
-			String endHour = startAndEndHour[1];
-			if(checkHoursFormat(startHour) && checkHoursFormat(endHour)) {
-				int intStartHour = Integer.parseInt(startHour);
-				int intEndHour = Integer.parseInt(endHour);
-				if(!(intStartHour >= intEndHour)) {
-					isCorrect = true;
-				}else {
-					//						throw new BadFormattedRequestException(Reason.HOUR_FRAME_FORMAT_INCORRECT);
-					//error para el log
-					System.out.println("HourFrame incorrect");
+	public ArrayList<Request.HourFrame> checkHourFrame(String hourFrames) {
+		Request.HourFrame hourFrame = null;
+		ArrayList<HourFrame> hourFramesList = new ArrayList<>();
+		String[] hourFramesSplited = hourFrames.split("_");
+		int startHour = 0;
+		int endHour = 0;
+		try {
+			if(hourFramesSplited.length < 6) {
+				for(int i = 0; i < hourFramesSplited.length; i = i+2) {
+					startHour = checkHoursFormat(hourFramesSplited[i]);
+					endHour = checkHoursFormat(hourFramesSplited[i+1]);
+					if(startHour != -1 && endHour != -1) {
+						if(startHour < endHour) {
+							hourFrame.startHour = startHour;
+							hourFrame.endHour = endHour;
+							hourFramesList.add(hourFrame);
+						}else {
+							throw new BadFormattedRequestException(Reason.HOUR_FRAME_TOO_SMALL);
+						}
+					}
 				}
+				if(hourFramesList.size() == hourFramesSplited.length) {
+					return hourFramesList;
+				}else {
+					throw new BadFormattedRequestException(Reason.HOUR_FRAME_FORMAT_INCORRECT);
+				}
+			}else {
+				throw new BadFormattedRequestException(Reason.TOO_MANY_HOUR_FRAMES);
 			}
-			//			}catch(BadFormattedRequestException ex) {
-			//				throw ex;
-			//			}
+		}catch(BadFormattedRequestException ex) {
+			System.out.println(ex.getMessage());
+			return null;
 		}
-		return isCorrect;
+
 	}
-	
+
 	//CHECKS IF THE HOUR FORMAT IS CORRECT
-		public boolean checkHoursFormat(String hour) {
-			boolean isCorrect = false;
+	public int checkHoursFormat(String hour) {
+		int hourInt = -1;
+		try {
 			if(hour.length() == 2) {
 				try {
-					int hourInt = Integer.parseInt(hour);
-					isCorrect = true;
+					hourInt = Integer.parseInt(hour);
 				}catch(NumberFormatException ex) {
-					isCorrect = false;
-					//				throw new BadFormattedRequestException(Reason.HOUR_FORMAT_INCORRECT);
-					//error para el log
+					System.out.println(ex.getMessage());
 				}
-
 			}else {
-				//			throw new BadFormattedRequestException(Reason.HOUR_FORMAT_INCORRECT);
-				//error para el log
+				throw new BadFormattedRequestException(Reason.HOUR_FORMAT_INCORRECT);
 			}
-			return isCorrect;
+		}catch(BadFormattedRequestException ex) {
+			System.out.println(ex.getMessage());
 		}
-
-	///VIEJO
-
-
-	//	public boolean isCorrectDayInMonth(int dayToCheck) {
-	//		boolean isCorrect = true;
-	//		if((dayToCheck-CalendarInfo.MONTH_DAY_NUM) > 0 || dayToCheck > 0) {
-	//			isCorrect = true;
-	//		}
-	//		return isCorrect;
-	//	}
-
-	//CHECKS IF THE START AND END HOUR HAVE SENSE
-	//	public boolean checkHourFrame(String[] startAndEndHour) throws BadFormattedRequestException {
-	//		boolean isCorrect = false;
-	//		if(startAndEndHour.length == 2) {
-	//			//			try {
-	//			String startHour = startAndEndHour[0];
-	//			String endHour = startAndEndHour[1];
-	//			if(checkHoursFormat(startHour) && checkHoursFormat(endHour)) {
-	//				int intStartHour = Integer.parseInt(startHour);
-	//				int intEndHour = Integer.parseInt(endHour);
-	//				if(!(intStartHour >= intEndHour)) {
-	//					isCorrect = true;
-	//				}else {
-	//					//						throw new BadFormattedRequestException(Reason.HOUR_FRAME_FORMAT_INCORRECT);
-	//					System.out.println("HourFrame incorrect");
-	//				}
-	//			}
-	//			//			}catch(BadFormattedRequestException ex) {
-	//			//				throw ex;
-	//			//			}
-	//		}
-	//		return isCorrect;
-	//	}
-
-	
-
-	//CHECKS IF DAY IS INCLUDED IN THE MONTH
-	public boolean checkDayIsInTheMonth(int dayToCheck) {
-		boolean isCorrect = false;
-		if((dayToCheck-CalendarInfo.MONTH_DAY_NUM) > 0 || dayToCheck > 0) {
-			isCorrect = true;
-		}
-		return isCorrect;
+		return hourInt;
 	}
-
-	//CHECKS IF THE STRING IS PARSEABLE
-	//	public int isParseable(String toParse) throws BadFormattedRequestException, NumberFormatException {
-	//		int toParseInt = 0;
-	//		try {
-	//			toParseInt = Integer.parseInt(toParse);
-	//		}catch(NumberFormatException ex) {
-	//			throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
-	//		}
-	//		return toParseInt;
-	//	}
 }
