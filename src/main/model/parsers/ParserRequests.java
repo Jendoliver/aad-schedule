@@ -48,7 +48,7 @@ public class ParserRequests extends Parser {
 		boolean isEverythingCorrect;
 
 		try {
-			parserRequestReader = new BufferedReader(new FileReader("request.txt"));
+			parserRequestReader = new BufferedReader(new FileReader(fileToParse));
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
