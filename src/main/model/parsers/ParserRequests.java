@@ -20,7 +20,7 @@ import model.RequestList;
  * // IMPORTANTE una mascara horaria pot incloure com a maxim 5 franges horaries
  * 
  * @author Jendoliver
- * @author Irene
+ * @author Irene 
  *
  */
 public class ParserRequests extends Parser {
