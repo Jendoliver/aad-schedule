@@ -11,7 +11,7 @@ import globals.OutputStrings;
  * The class responsible for parsing the international files and setting the globals.InputStrings and globals.OutputStrings values
  * 
  * @author Jendoliver
- * @author Magner
+ * @author Magner 
  *
  */
 public class ParserInternational extends Parser 
