@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import globals.CalendarInfo;
 import globals.Configuration;
 import model.Request.HourFrame;
 
@@ -37,11 +38,9 @@ public class RequestPoliceman
 	{	
 		for(Request request : list)
 		{
-			// Si los RequestDays de la request tienen sentido respecto a la franja de dias de la misma
-				if(isExistingRoom(request.roomName))
-					processRequestOnSchedule(request, roomSchedules.get(request.roomName));
-				else
-					processRequestOnSchedule(request, roomSchedules.put(request.roomName, new RoomSchedule()));
+			if( ! roomSchedules.containsKey(request.roomName))
+				roomSchedules.put(request.roomName, new RoomSchedule());
+			processRequestOnSchedule(request, roomSchedules.get(request.roomName));
 		}
 	}
 
@@ -56,8 +55,7 @@ public class RequestPoliceman
 				{
 					if(schedule.isEmptyHourFrame(day, hour))
 					{
-						Map<Integer, Request> dayHours = schedule.get(day);
-						dayHours.put(hour, request);
+						schedule.get(day).put(hour, request);
 					}
 					else
 					{
@@ -68,29 +66,67 @@ public class RequestPoliceman
 		}
 	}
 	
-	private List<Integer> getExactDays(Request request)
+	// FIXME not checking dayframe??
+	/*private List<Integer> getExactDays(Request request)
 	{
 		List<Integer> exactDays = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS));
-		// TODO finish
-		for(int i = 1; i <= 4; i++)
+		calendar.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1); // January = 0
+		calendar.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
+		int maxWeek = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		for(int i = 1; i <= calendar.getActualMaximum(Calendar.WEEK_OF_MONTH); i++) // Correcto
 		{
 			calendar.set(Calendar.WEEK_OF_MONTH, i);
+			int j = calendar.get(Calendar.WEEK_OF_MONTH);
 			for(RequestDays requestDay : request.requestedDays)
 			{
 				calendar.set(Calendar.DAY_OF_WEEK, requestDay.ordinal());
-				int day = calendar.get(Calendar.DAY_OF_MONTH);
+				int day = calendar.get(Calendar.DAY_OF_MONTH); // CHECK esto deberia devolver algo menor a 1 si el dia no concuerda. Mirar Calendar.lenient, puede servir para detectarlo
 				if(day >= request.dayFrame.startDay && day <= request.dayFrame.endDay)
 					exactDays.add(day);
 			}
 		}
 		return exactDays;
+	}*/
+	
+	private List<Integer> getExactDays(Request request)
+	{
+		List<Integer> exactDays = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MONTH, (Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1));
+		calendar.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
+		
+		List<Integer> firstDays = new ArrayList<>();
+		
+		for(int day = request.dayFrame.startDay; day < request.dayFrame.startDay + 7 && day < CalendarInfo.MONTH_DAY_NUM; day++)
+		{
+			calendar.set(Calendar.DAY_OF_MONTH, day);
+			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+			if(maskContainsDay(request.requestedDays, dayOfWeek - 1)) { // Parchako ( Calendar.SUNDAY = 1, pero RequestDays.SUNDAY = 0)
+				firstDays.add(day);
+				exactDays.add(day);
+			}
+		}
+		
+		for(Integer day : firstDays)
+		{
+			int nextDay = day + 7;
+			while (nextDay <= request.dayFrame.endDay)
+			{
+				exactDays.add(nextDay);
+				nextDay += 7;
+			}
+		}
+		return exactDays;
 	}
 	
-	// NOTE: Case-sensitive
-	private boolean isExistingRoom(String roomName) 
+	private boolean maskContainsDay(List<RequestDays> mask, int day) 
 	{
-		return roomSchedules.containsKey(roomName);
+		for(RequestDays requestedDay : mask)
+		{
+			if(requestedDay.ordinal() == day)
+				return true;
+		}
+		return false;
 	}
 }

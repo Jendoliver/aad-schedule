@@ -45,6 +45,6 @@ public class RoomSchedule extends HashMap<Integer, Map<Integer, Request>>
 	 */
 	public boolean isEmptyHourFrame(int day, int beginningHour) 
 	{
-		return get(day).get(beginningHour).equals(null);
+		return get(day).get(beginningHour) == null;
 	}
 }

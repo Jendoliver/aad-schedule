@@ -30,7 +30,7 @@ public class Request
 	
 	public String activityName;
 	public String roomName;
-	public DayFrame dayFrame;
+	public DayFrame dayFrame = new DayFrame();
 	public List<HourFrame> hourFrames = new ArrayList<>();
 	public List<RequestDays> requestedDays = new ArrayList<>();
 	
