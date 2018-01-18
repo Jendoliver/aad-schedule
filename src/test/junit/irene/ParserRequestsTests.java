@@ -161,13 +161,13 @@ public class ParserRequestsTests
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
 		CalendarInfo.MONTH_DAY_NUM = 31;
-		InputStrings.MONDAY = "L";
-		InputStrings.TUESDAY = "M";
-		InputStrings.WEDNESDAY = "X";
-		InputStrings.THURSDAY = "J";
-		InputStrings.FRIDAY = "V";
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
 		InputStrings.SATURDAY = "S";
-		InputStrings.SUNDAY = "D";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_DAY_MASK_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		assertTrue("A day mask can only contain InputStrings, can't contain repeated days even if correct "
@@ -236,10 +236,10 @@ public class ParserRequestsTests
 		assertEquals("Left day (as well as right) should be clamped when the month is contained in the date",
 				1, requestList.get(0).dayFrame.startDay);
 		assertEquals("Right day (as well as left) should be clamped when the month is contained in the date",
-				31, requestList.get(0).dayFrame.endDay);
+				28, requestList.get(0).dayFrame.endDay);
 		assertEquals("Left day should be clamped when only a left part of the month is contained in the date",
 				1, requestList.get(1).dayFrame.startDay);
 		assertEquals("Right day should be clamped when only a right part of the month is contained in the date",
-				31, requestList.get(2).dayFrame.startDay);
+				28, requestList.get(2).dayFrame.startDay);
 	}
 }
