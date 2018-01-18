@@ -137,35 +137,57 @@ public class ParserRequests extends Parser {
 	//CHECKS IF THE START AND END DAY ARE PLAUSIBLE AND IF THE MONTH AND YEAR ARE LIKE THE CONFIGURED ONES
 	Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish) {
 		Request.DayFrame dayFrame = null;
-		if(dayFrameStart.length == 3 && dayFrameFinish.length == 3) {
-			if(isCorrectMonth(dayFrameStart[1]) && isCorrectMonth(dayFrameFinish[1]) && isCorrectYear(dayFrameStart[2]) && isCorrectYear(dayFrameFinish[2])) {
-				int dayStart = isParseable(dayFrameStart[0]);
-				int dayFinish = isParseable(dayFrameFinish[0]);
-				if(isCorrectDayInMonth(dayStart) && isCorrectDayInMonth(dayFinish)) {
-					dayFrame.startDay = dayStart;
-					dayFrame.endDay = dayFinish;
+		try {
+			if(dayFrameStart.length == 3 && dayFrameFinish.length == 3) {
+				if(isCorrectMonth(dayFrameStart[1]) && isCorrectYear(dayFrameStart[2])) {
+					int monthStart = isParseable(dayFrameStart[1]);
+					int monthFinish = isParseable(dayFrameFinish[1]);
+					int dayStart = isParseable(dayFrameStart[0]);
+					int dayFinish = isParseable(dayFrameFinish[0]);
+					if(monthFinish !=0 && monthStart !=0) {
+						if(monthFinish > monthStart) {
+							dayFinish = CalendarInfo.MONTH_DAY_NUM;
+							monthFinish = monthStart;
+						}else if(monthFinish < monthStart) {
+							throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
+						}
+					}else {
+						throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
+					}
+					if(isCorrectDayInMonth(dayStart) && isCorrectDayInMonth(dayFinish)) {
+						dayFrame.startDay = dayStart;
+						dayFrame.endDay = dayFinish;
+					}else {
+						throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
+					}
+				}else {
+					throw new BadFormattedRequestException(Reason.MONTH_OUT_OF_BOUNDS);
 				}
+			}else {
+				throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
 			}
+		}catch(BadFormattedRequestException ex) {
+			ex.printStackTrace();
 		}
 		return dayFrame;
 	}
 
 	//CHECKS IF THE MONTH IS THE SAME AS THE CONFIGURED ONE
 	boolean isCorrectMonth(String monthToCheck) {
-		boolean isCorrect = false;
 		if(monthToCheck.equals(Configuration.MONTH_TO_PROCESS)) {
-			isCorrect = true;
+			return true;
+		}else {
+			return false;
 		}
-		return isCorrect;
 	}
 
 	//CHECKS IF THE YEAR IS THE SAME AS THE CONFIGURED ONE
 	boolean isCorrectYear(String yearToCheck) {
-		boolean isCorrect = false;
 		if(yearToCheck.equals(Configuration.YEAR_TO_PROCESS)) {
-			isCorrect = true;
+			return true;		
+		}else {
+			return false;
 		}
-		return isCorrect;
 	}
 
 	//CHECKS IF THE STRING IS PARSEABLE
@@ -180,11 +202,11 @@ public class ParserRequests extends Parser {
 	}
 
 	public boolean isCorrectDayInMonth(int dayToCheck) {
-		boolean isCorrect = false;
 		if((dayToCheck-CalendarInfo.MONTH_DAY_NUM) > 0 && dayToCheck > 0) {
-			isCorrect = true;
+			return true;
+		}else {
+			return false;
 		}
-		return isCorrect;
 	}
 
 	//CHECKS IF THE START AND END HOUR HAVE SENSE
