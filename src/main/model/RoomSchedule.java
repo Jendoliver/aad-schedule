@@ -10,7 +10,7 @@ import globals.CalendarInfo;
  * to ensure that there are no conflicts between well-formatted requests, and then passed to OutputGenerator to
  * generate the final schedule.
  * 
- * @author Jandol
+ * @author Jendoliver
  * @author Raikish
  *
  */

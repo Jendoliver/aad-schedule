@@ -4,7 +4,7 @@ import globals.InputStrings;
 
 /**
  * 
- * @author Jandol
+ * @author Jendoliver
  * @author Raikish
  *
  */

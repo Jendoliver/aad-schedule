@@ -40,4 +40,22 @@ public final class OutputStrings
 		public static String NOVEMBER;
 		public static String DECEMBER;
 	}
+	
+	public static String numericMonthToFullString(int month)
+	{
+		if(month == 1) return Months.JANUARY;
+		if(month == 2) return Months.FEBRUARY;
+		if(month == 3) return Months.MARCH;
+		if(month == 4) return Months.APRIL;
+		if(month == 5) return Months.MAY;
+		if(month == 6) return Months.JUNE;
+		if(month == 7) return Months.JULY;
+		if(month == 8) return Months.AUGUST;
+		if(month == 9) return Months.SEPTEMBER;
+		if(month == 10) return Months.OCTOBER;
+		if(month == 11) return Months.NOVEMBER;
+		if(month == 12) return Months.DECEMBER;
+		
+		return null;
+	}
 }
