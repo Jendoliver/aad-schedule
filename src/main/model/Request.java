@@ -16,6 +16,12 @@ public class Request
 		public int startHour;
 		public int endHour;
 		
+		public HourFrame(int startHour, int endHour) {
+			super();
+			this.startHour = startHour;
+			this.endHour = endHour;
+		}
+
 		public HourFrame() { }
 	}
 	
@@ -24,7 +30,13 @@ public class Request
 		public int startDay;
 		public int endDay;
 		
-		private DayFrame() { }
+		public DayFrame(int startDay, int endDay) {
+			this.startDay = startDay;
+			this.endDay = endDay;
+		}
+		public DayFrame() {
+			
+		}
 	}
 	
 	public String activityName;

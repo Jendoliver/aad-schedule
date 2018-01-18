@@ -1,6 +1,6 @@
 package model.parsers;
 
-import java.awt.List;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,38 +26,33 @@ import model.RequestList;
  *
  */
 public class ParserRequests extends Parser {
+	private List<String> loadedRequests;
 
-	public ParserRequests(String fileToParse) {
-		this.fileToParse = fileToParse;
+	public ParserRequests(FileNames fileToParse) {
+		loadRequests(fileToParse.getName());
 	}
 
+	public ParserRequests(List<String> stringsToParse) {
+		loadedRequests = stringsToParse;
+	}
 
-	public RequestList parse() {
+	public RequestList parse() 
+	{
+		for(String request : loadedRequests)
+		{
 
-		String mainLine = "";
-		BufferedReader parserRequestReader = null;
-		Request request = new Request();
-		RequestList requestList = new RequestList();
-		int contador = 0;
-		String activityName;
-		String roomName;
-		String dayFrameStart;
-		String dayFrameFinish;
-		String dayMask;
-		String hourFrames;
-		boolean isEverythingCorrect;
+			Request requestToAdd = new Request();
+			RequestList requestList = new RequestList();
+			String activityName;
+			String roomName;
+			String dayFrameStart;
+			String dayFrameFinish;
+			String dayMask;
+			String hourFrames;
+			boolean isEverythingCorrect;
 
-		try {
-			parserRequestReader = new BufferedReader(new FileReader(fileToParse));
-			mainLine = parserRequestReader.readLine();
-		} catch (IOException | NullPointerException e) {
-			System.out.println(e.getMessage());
-		}
+			String[] mainLineSplited = request.split(" ");
 
-		while(mainLine != null) {
-			String[] mainLineSplited = mainLine.split(" ");
-			System.out.println("Request numero: " + contador);
-			contador++;
 			try {
 				//CHECK NUMBER OF ARGUMENTS
 				if(mainLineSplited.length == 6) {
@@ -72,16 +67,16 @@ public class ParserRequests extends Parser {
 					isEverythingCorrect = true;
 
 					//ADDS ACTIVITY NAME AND ROOM NAME
-					request.activityName = activityName;
-					request.roomName = roomName;
+					requestToAdd.activityName = activityName;
+					requestToAdd.roomName = roomName;
 
 					//CHECKS IF DAYFRAME IS CORRECT
 					String[] dayFrameStartSplited = dayFrameStart.split("/");
 					String[] dayFrameFinishSplited = dayFrameFinish.split("/");
 
-					Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited);
+					Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited, requestToAdd);
 					if(isCorrectDayFrame != null) {
-						request.dayFrame = isCorrectDayFrame;
+						requestToAdd.dayFrame = isCorrectDayFrame;
 					}else {
 						isEverythingCorrect = false;
 						throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
@@ -94,7 +89,7 @@ public class ParserRequests extends Parser {
 						for(String day : dayMaskSplited) {
 							if(day.equals(dayMaskSplited[0])) continue;
 							if(InputStrings.isValidDay(day)) {
-								request.requestedDays.add(InputStrings.toRequestDays(day));
+								requestToAdd.requestedDays.add(InputStrings.toRequestDays(day));
 							}else {
 								isEverythingCorrect = false;
 								throw new BadFormattedRequestException(Reason.DAY_MASK_INVALID_CHARACTER);
@@ -106,15 +101,15 @@ public class ParserRequests extends Parser {
 					}
 
 					//CHECKS IF THE HOURS REQUESTED ARE WELL FORMATED
-					if(checkHourFrame(hourFrames) != null) {
-						request.hourFrames = checkHourFrame(hourFrames);
+					if(checkHourFrame(hourFrames, requestToAdd) != null) {
+						requestToAdd.hourFrames = checkHourFrame(hourFrames, requestToAdd);
 					}else {
 						isEverythingCorrect = false;
 					}
 
 					//IF EVERYTHING IS CORRECT ADDS THE REQUEST TO THE REQUEST LIST
 					if(isEverythingCorrect) {
-						requestList.add(request);
+						requestList.add(requestToAdd);
 					}
 				}else {
 					isEverythingCorrect = false;
@@ -123,14 +118,46 @@ public class ParserRequests extends Parser {
 			}catch(BadFormattedRequestException ex) {
 				System.out.println(ex.getMessage());
 			}
+			//		}
+			return requestList;
 		}
-		return requestList;
+		return null;
+	}
+
+	private void loadRequests(String fileToParse)
+	{
+		try (BufferedReader br = new BufferedReader(new FileReader(fileToParse)))
+		{
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				loadedRequests.add(sCurrentLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public enum FileNames 
+	{
+		CONFIG("config.txt"), INTERNATIONAL_PRE("international."), REQUESTS("requests.txt"); // This doesn't have an extension because it depends on the configuration file.
+
+		private String name;
+		private FileNames(String name) { this.name = name; }
+
+		/**
+		 * Returns the actual name of the file as a String
+		 */
+		public String getName() { return name; }
+	}
+
+	public ParserRequests(String fileToParse) {
+		this.fileToParse = fileToParse;
 	}
 
 
 	//CHECKS IF THE START AND END DAY ARE PLAUSIBLE AND IF THE MONTH AND YEAR ARE LIKE THE CONFIGURED ONES
-	Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish) {
-		Request.DayFrame dayFrame = null;
+	Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish, Request request) {
+		Request.DayFrame dayFrameForRequest = null;
 		try {
 			if(dayFrameStart.length == 3 && dayFrameFinish.length == 3) {
 				if(isCorrectMonth(dayFrameStart[1]) && isCorrectYear(dayFrameStart[2])) {
@@ -149,8 +176,7 @@ public class ParserRequests extends Parser {
 						throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
 					}
 					if(isCorrectDayInMonth(dayStart) && isCorrectDayInMonth(dayFinish)) {
-						dayFrame.startDay = dayStart;
-						dayFrame.endDay = dayFinish;
+						dayFrameForRequest =  request.new DayFrame(dayStart, dayFinish);
 					}else {
 						throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
 					}
@@ -163,7 +189,7 @@ public class ParserRequests extends Parser {
 		}catch(BadFormattedRequestException ex) {
 			ex.printStackTrace();
 		}
-		return dayFrame;
+		return dayFrameForRequest;
 	}
 
 	//CHECKS IF THE MONTH IS THE SAME AS THE CONFIGURED ONE
@@ -196,7 +222,7 @@ public class ParserRequests extends Parser {
 	}
 
 	public boolean isCorrectDayInMonth(int dayToCheck) {
-		if((dayToCheck-CalendarInfo.MONTH_DAY_NUM) > 0 && dayToCheck > 0) {
+		if((CalendarInfo.MONTH_DAY_NUM-dayToCheck) >= 0 && dayToCheck > 0) {
 			return true;
 		}else {
 			return false;
@@ -204,7 +230,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE START AND END HOUR HAVE SENSE
-	public ArrayList<Request.HourFrame> checkHourFrame(String hourFrames) {
+	public ArrayList<Request.HourFrame> checkHourFrame(String hourFrames, Request request) {
 		Request.HourFrame hourFrame = null;
 		ArrayList<HourFrame> hourFramesList = new ArrayList<>();
 		String[] hourFramesSplited = hourFrames.split("_");
@@ -212,13 +238,14 @@ public class ParserRequests extends Parser {
 		int endHour = 0;
 		try {
 			if(hourFramesSplited.length < 6) {
-				for(int i = 0; i < hourFramesSplited.length; i = i+2) {
-					startHour = checkHoursFormat(hourFramesSplited[i]);
-					endHour = checkHoursFormat(hourFramesSplited[i+1]);
+
+				for(int i = 0; i < hourFramesSplited.length; i++) {
+					String[] hours = hourFramesSplited[i].split("-");
+					startHour = checkHoursFormat(hours[0]);
+					endHour = checkHoursFormat(hours[1]);
 					if(startHour != -1 && endHour != -1) {
 						if(startHour < endHour) {
-							hourFrame.startHour = startHour;
-							hourFrame.endHour = endHour;
+							hourFrame = request.new HourFrame(startHour, endHour);
 							hourFramesList.add(hourFrame);
 						}else {
 							throw new BadFormattedRequestException(Reason.HOUR_FRAME_TOO_SMALL);
@@ -244,7 +271,7 @@ public class ParserRequests extends Parser {
 	public int checkHoursFormat(String hour) {
 		int hourInt = -1;
 		try {
-			if(hour.length() == 2) {
+			if(hour.length() <= 2) {
 				try {
 					hourInt = Integer.parseInt(hour);
 				}catch(NumberFormatException ex) {
