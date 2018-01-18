@@ -49,14 +49,8 @@ public class ParserRequests extends Parser {
 
 		try {
 			parserRequestReader = new BufferedReader(new FileReader(fileToParse));
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
-		try {
 			mainLine = parserRequestReader.readLine();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}catch(NullPointerException e) {
+		} catch (IOException | NullPointerException e) {
 			System.out.println(e.getMessage());
 		}
 
