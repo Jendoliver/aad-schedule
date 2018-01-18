@@ -65,6 +65,7 @@ public class RequestPoliceman
 			}
 		}
 	}
+<<<<<<< HEAD
 	
 	// FIXME not checking dayframe??
 	/*private List<Integer> getExactDays(Request request)
@@ -89,6 +90,9 @@ public class RequestPoliceman
 		return exactDays;
 	}*/
 	
+=======
+
+>>>>>>> 1b84ea39738da281f7d340155f5717363e18bf95
 	private List<Integer> getExactDays(Request request)
 	{
 		List<Integer> exactDays = new ArrayList<>();

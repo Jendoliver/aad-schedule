@@ -6,7 +6,7 @@ import globals.CalendarInfo;
 import globals.OutputStrings;
 
 /**
- * The OutputGeneratorStrategy for transforming a RequestList into an HTML calendar.
+ * The OutputGeneratorStrategy for transforming a Map<String, RoomSchedule> into an HTML calendar.
  * 
  * IMPORTANT: This class doesn't do any kind of checking over the RequestList as it expects it
  * to have all its possible issues already addressed by model.RequestPoliceman. Thus, it only iterates over
@@ -23,14 +23,20 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	public void print(Map<String, RoomSchedule> roomSchedules) 
 	{
 		output.append("<table>");
-		printHeader();
+		printHead();
+		printTableHeader();
 		for(int i = 0; i < CalendarInfo.MONTH_DAY_NUM; i++)
 		{
 			output.append("<tr>");
 		}
 	}
+	
+	private void printHead()
+	{
+		
+	}
 
-	private void printHeader() 
+	private void printTableHeader() 
 	{
 		output.append("<thead><th>")
 			.append(OutputStrings.Days.SUNDAY).append("</th><th>")
@@ -42,12 +48,18 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			.append(OutputStrings.Days.SATURDAY).append("</th></thead>");
 	}
 	
+<<<<<<< HEAD
 	// TODO make moar beatiful
 	private void printNonMonthDays(int num)
 	{/*
+=======
+	// TODO implement
+	/*private void printNonMonthDays(int num)
+	{
+>>>>>>> 1b84ea39738da281f7d340155f5717363e18bf95
 		for(int i = 0; i < num; i++) {
 			output.append("<td style='background-color: black;'/>)
-		}*/
+		}
 		
 		// FIXME PLIS
 	}
@@ -55,6 +67,6 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private void printToFile()
 	{
 		
-	}
+	}*/
 
 }
