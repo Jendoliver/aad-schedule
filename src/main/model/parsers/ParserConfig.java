@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import globals.Configuration;
+import globals.Constants.FileNames;
 
 /**
  * The class responsible for parsing the configuration file and setting the globals.Configuration values.
@@ -15,8 +16,8 @@ import globals.Configuration;
  */
 public class ParserConfig extends Parser 
 {
-	public ParserConfig(String fileToParse) {
-		this.fileToParse = fileToParse;
+	public ParserConfig(FileNames fileToParse) {
+		this.fileToParse = fileToParse.getName();
 	}
 
 	public void parse()  // Parse fileToParse and fill Configuration
