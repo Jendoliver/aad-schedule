@@ -12,11 +12,13 @@ public final class Constants
 	
 	public enum FileNames 
 	{
-		CONFIG("config.txt"), INTERNATIONAL_PRE("international."), REQUESTS("requests.txt"); // This doesn't have an extension because it depends on the configuration file.
-
+		CONFIG("config.txt"), 
+		INTERNATIONAL_PRE("international."), // This doesn't have an extension because it depends on the configuration file.
+		REQUESTS("requests.txt"); 
+		
 		private String name;
 		private FileNames(String name) { this.name = name; }
-
+		
 		/**
 		 * Returns the actual name of the file as a String
 		 */

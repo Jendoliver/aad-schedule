@@ -2,10 +2,8 @@ package model.parsers;
 
 import java.util.List;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.chrono.IsoChronology;
 import java.util.ArrayList;
 
 import exceptions.BadFormattedRequestException;
@@ -18,6 +16,14 @@ import model.Request;
 import model.Request.HourFrame;
 import model.RequestList;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+
+import exceptions.BadFormattedRequestException;
+import globals.Constants.FileNames;
+
 /**
  * The class responsible for parsing the requests file and generating a RequestList.
  * // IMPORTANTE una mascara horaria pot incloure com a maxim 5 franges horaries
@@ -26,13 +32,16 @@ import model.RequestList;
  * @author Irene 
  *
  */
-public class ParserRequests extends Parser {
-	private List<String> loadedRequests;
 
+public class ParserRequests extends Parser 
+{
+	private List<String> loadedRequests;
+	private RequestList acceptedRequests = new RequestList();
+	
 	public ParserRequests(FileNames fileToParse) {
 		loadRequests(fileToParse.getName());
 	}
-
+	
 	public ParserRequests(List<String> stringsToParse) {
 		loadedRequests = stringsToParse;
 	}
@@ -41,88 +50,89 @@ public class ParserRequests extends Parser {
 	{
 		for(String request : loadedRequests)
 		{
-
-			Request requestToAdd = new Request();
-			RequestList requestList = new RequestList();
-			String activityName;
-			String roomName;
-			String dayFrameStart;
-			String dayFrameFinish;
-			String dayMask;
-			String hourFrames;
-			boolean isEverythingCorrect;
-
-			String[] mainLineSplited = request.split(" ");
-
 			try {
-				//CHECK NUMBER OF ARGUMENTS
-				if(mainLineSplited.length == 6) {
+				parse(request);
+			} catch (Exception e) {
+				// TODO log e.getMsg()
+			}
+		}
+		return acceptedRequests;
+	}
+	
+	private void parse(String request) throws BadFormattedRequestException
+	{
+		Request requestToAdd = new Request();
+		String activityName;
+		String roomName;
+		String dayFrameStart;
+		String dayFrameFinish;
+		String dayMask;
+		String hourFrames;
+		boolean isEverythingCorrect;
 
-					//VALUES FROM MAIN LINE SPLITED
-					activityName = mainLineSplited[0];
-					roomName = mainLineSplited[1];
-					dayFrameStart = mainLineSplited[2];
-					dayFrameFinish = mainLineSplited[3];
-					dayMask = mainLineSplited[4];
-					hourFrames = mainLineSplited[5];
-					isEverythingCorrect = true;
+		String[] mainLineSplited = request.split(" ");
 
-					//ADDS ACTIVITY NAME AND ROOM NAME
-					requestToAdd.activityName = activityName;
-					requestToAdd.roomName = roomName;
+			//CHECK NUMBER OF ARGUMENTS
+			if(mainLineSplited.length == 6) {
 
-					//CHECKS IF DAYFRAME IS CORRECT
-					String[] dayFrameStartSplited = dayFrameStart.split("/");
-					String[] dayFrameFinishSplited = dayFrameFinish.split("/");
+				//VALUES FROM MAIN LINE SPLITED
+				activityName = mainLineSplited[0];
+				roomName = mainLineSplited[1];
+				dayFrameStart = mainLineSplited[2];
+				dayFrameFinish = mainLineSplited[3];
+				dayMask = mainLineSplited[4];
+				hourFrames = mainLineSplited[5];
+				isEverythingCorrect = true;
 
-					Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited, requestToAdd);
-					if(isCorrectDayFrame != null) {
-						requestToAdd.dayFrame = isCorrectDayFrame;
-					}else {
-						isEverythingCorrect = false;
-						throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
-					}
+				//ADDS ACTIVITY NAME AND ROOM NAME
+				requestToAdd.activityName = activityName;
+				requestToAdd.roomName = roomName;
 
-					//CHECKS IF THE DAYMASK IS CORRECT
-					//split("") will return an empty first value, so [0] doesn't count, start at 1
-					String[] dayMaskSplited = dayMask.split("");
-					if(dayMaskSplited.length <= 8 && dayMaskSplited.length > 0) {
-						for(String day : dayMaskSplited) {
-							if(day.equals(dayMaskSplited[0])) continue;
-							if(InputStrings.isValidDay(day)) {
-								requestToAdd.requestedDays.add(InputStrings.toRequestDays(day));
-							}else {
-								isEverythingCorrect = false;
-								throw new BadFormattedRequestException(Reason.DAY_MASK_INVALID_CHARACTER);
-							}
+				//CHECKS IF DAYFRAME IS CORRECT
+				String[] dayFrameStartSplited = dayFrameStart.split("/");
+				String[] dayFrameFinishSplited = dayFrameFinish.split("/");
+
+				Request.DayFrame isCorrectDayFrame = isCorrectDayFrame(dayFrameStartSplited, dayFrameFinishSplited, requestToAdd);
+				if(isCorrectDayFrame != null) {
+					requestToAdd.dayFrame = isCorrectDayFrame;
+				}else {
+					isEverythingCorrect = false;
+					throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
+				}
+
+				//CHECKS IF THE DAYMASK IS CORRECT
+				//split("") will return an empty first value, so [0] doesn't count, start at 1
+				String[] dayMaskSplited = dayMask.split("");
+				if(dayMaskSplited.length <= 8 && dayMaskSplited.length > 0) {
+					for(String day : dayMaskSplited) {
+						if(day.equals(dayMaskSplited[0])) continue;
+						if(InputStrings.isValidDay(day)) {
+							requestToAdd.requestedDays.add(InputStrings.toRequestDays(day));
+						}else {
+							isEverythingCorrect = false;
+							throw new BadFormattedRequestException(Reason.DAY_MASK_INVALID_CHARACTER);
 						}
-					}else {
-						isEverythingCorrect = false;
-						throw new BadFormattedRequestException(Reason.DAY_MASK_TOO_MANY_ARGS);
-					}
-
-					//CHECKS IF THE HOURS REQUESTED ARE WELL FORMATED
-					if(checkHourFrame(hourFrames, requestToAdd) != null) {
-						requestToAdd.hourFrames = checkHourFrame(hourFrames, requestToAdd);
-					}else {
-						isEverythingCorrect = false;
-					}
-
-					//IF EVERYTHING IS CORRECT ADDS THE REQUEST TO THE REQUEST LIST
-					if(isEverythingCorrect) {
-						requestList.add(requestToAdd);
 					}
 				}else {
 					isEverythingCorrect = false;
-					throw new BadFormattedRequestException(Reason.ARGS);
+					throw new BadFormattedRequestException(Reason.DAY_MASK_TOO_MANY_ARGS);
 				}
-			}catch(BadFormattedRequestException ex) {
-				System.out.println(ex.getMessage());
+
+				//CHECKS IF THE HOURS REQUESTED ARE WELL FORMATED
+				if(checkHourFrame(hourFrames, requestToAdd) != null) {
+					requestToAdd.hourFrames = checkHourFrame(hourFrames, requestToAdd);
+				}else {
+					isEverythingCorrect = false;
+				}
+
+				//IF EVERYTHING IS CORRECT ADDS THE REQUEST TO THE REQUEST LIST
+				if(isEverythingCorrect) {
+					acceptedRequests.add(requestToAdd);
+				}
+			}else {
+				isEverythingCorrect = false;
+				throw new BadFormattedRequestException(Reason.ARGS);
 			}
-			//		}
-			return requestList;
-		}
-		return null;
 	}
 
 	private void loadRequests(String fileToParse)
@@ -138,12 +148,6 @@ public class ParserRequests extends Parser {
 			e.printStackTrace();
 		}
 	}
-	
-
-	public ParserRequests(String fileToParse) {
-		this.fileToParse = fileToParse;
-	}
-
 	
 	/*
 	 * HELPER METHODS

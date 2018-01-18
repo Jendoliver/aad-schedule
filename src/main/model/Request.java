@@ -15,14 +15,9 @@ public class Request
 	{
 		public int startHour;
 		public int endHour;
-		
-		public HourFrame(int startHour, int endHour) {
-			super();
-			this.startHour = startHour;
-			this.endHour = endHour;
-		}
 
 		public HourFrame() { }
+		public HourFrame(int startHour, int endHour) { this.startHour = startHour; this.endHour = endHour; }
 	}
 	
 	public class DayFrame
@@ -41,9 +36,12 @@ public class Request
 	
 	public String activityName;
 	public String roomName;
-	public DayFrame dayFrame;
+	public DayFrame dayFrame = new DayFrame();
 	public List<HourFrame> hourFrames = new ArrayList<>();
 	public List<RequestDays> requestedDays = new ArrayList<>();
 	
 	public Request() { }
+	
+	// Used to make tests easier on RequestListTests
+	public Request(String activityName) { this.activityName = activityName; }
 }

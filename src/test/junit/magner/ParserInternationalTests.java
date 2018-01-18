@@ -16,7 +16,7 @@ public class ParserInternationalTests
 	public void parseTestInput() 
 	{
 		Configuration.INPUT_LANG = "ESP";
-		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE + Configuration.INPUT_LANG, true);
+		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE.getName() + Configuration.INPUT_LANG, true);
 		parserInternational.parse();
 		
 		assertEquals("L", InputStrings.MONDAY);
@@ -34,7 +34,7 @@ public class ParserInternationalTests
 	public void parseTestOutput()
 	{
 		Configuration.OUTPUT_LANG = "ESP";
-		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE + Configuration.OUTPUT_LANG, false);
+		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE.getName() + Configuration.OUTPUT_LANG, false);
 		parserInternational.parse();
 		
 		assertEquals("Agenda", OutputStrings.TITLE);
