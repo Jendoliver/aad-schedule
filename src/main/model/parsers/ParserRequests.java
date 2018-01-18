@@ -13,6 +13,7 @@ import exceptions.BadFormattedRequestException.Reason;
 import globals.CalendarInfo;
 import globals.Configuration;
 import globals.InputStrings;
+import globals.Constants.FileNames;
 import model.Request;
 import model.Request.HourFrame;
 import model.RequestList;
@@ -137,26 +138,21 @@ public class ParserRequests extends Parser {
 			e.printStackTrace();
 		}
 	}
-	public enum FileNames 
-	{
-		CONFIG("config.txt"), INTERNATIONAL_PRE("international."), REQUESTS("requests.txt"); // This doesn't have an extension because it depends on the configuration file.
-
-		private String name;
-		private FileNames(String name) { this.name = name; }
-
-		/**
-		 * Returns the actual name of the file as a String
-		 */
-		public String getName() { return name; }
-	}
+	
 
 	public ParserRequests(String fileToParse) {
 		this.fileToParse = fileToParse;
 	}
 
+	
+	/*
+	 * HELPER METHODS
+	 * 
+	 * 
+	 */
 
 	//CHECKS IF THE START AND END DAY ARE PLAUSIBLE AND IF THE MONTH AND YEAR ARE LIKE THE CONFIGURED ONES
-	Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish, Request request) {
+	private Request.DayFrame isCorrectDayFrame(String[] dayFrameStart, String[] dayFrameFinish, Request request) {
 		Request.DayFrame dayFrameForRequest = null;
 		try {
 			if(dayFrameStart.length == 3 && dayFrameFinish.length == 3) {
@@ -193,7 +189,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE MONTH IS THE SAME AS THE CONFIGURED ONE
-	boolean isCorrectMonth(String monthToCheck) {
+	private boolean isCorrectMonth(String monthToCheck) {
 		if(monthToCheck.equals(Configuration.MONTH_TO_PROCESS)) {
 			return true;
 		}else {
@@ -202,7 +198,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE YEAR IS THE SAME AS THE CONFIGURED ONE
-	boolean isCorrectYear(String yearToCheck) {
+	private boolean isCorrectYear(String yearToCheck) {
 		if(yearToCheck.equals(Configuration.YEAR_TO_PROCESS)) {
 			return true;		
 		}else {
@@ -211,7 +207,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE STRING IS PARSEABLE
-	public int isParseable(String toParse) {
+	private int isParseable(String toParse) {
 		int toParseInt = 0;
 		try {
 			toParseInt = Integer.parseInt(toParse);
@@ -221,7 +217,8 @@ public class ParserRequests extends Parser {
 		return toParseInt;
 	}
 
-	public boolean isCorrectDayInMonth(int dayToCheck) {
+	//CHECKS IF THE DAY IS PLAUSIBLE IN THE CONFIGURATED MONTH
+	private boolean isCorrectDayInMonth(int dayToCheck) {
 		if((CalendarInfo.MONTH_DAY_NUM-dayToCheck) >= 0 && dayToCheck > 0) {
 			return true;
 		}else {
@@ -230,7 +227,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE START AND END HOUR HAVE SENSE
-	public ArrayList<Request.HourFrame> checkHourFrame(String hourFrames, Request request) {
+	private ArrayList<Request.HourFrame> checkHourFrame(String hourFrames, Request request) {
 		Request.HourFrame hourFrame = null;
 		ArrayList<HourFrame> hourFramesList = new ArrayList<>();
 		String[] hourFramesSplited = hourFrames.split("_");
@@ -268,7 +265,7 @@ public class ParserRequests extends Parser {
 	}
 
 	//CHECKS IF THE HOUR FORMAT IS CORRECT
-	public int checkHoursFormat(String hour) {
+	private int checkHoursFormat(String hour) {
 		int hourInt = -1;
 		try {
 			if(hour.length() <= 2) {
