@@ -1,6 +1,7 @@
 package model.parsers;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -26,12 +27,15 @@ public class ParserInternational extends Parser
 	public void parse() 
 	{
 		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(fileToParse));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		String[] parameters;
 		if(isInput) // Parse fileToParse and fill InputStrings (003,005)
 		{
-			try 
-			{
-				br = new BufferedReader(new FileReader(fileToParse));
+			try {
 				String sCurrentLine;
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
@@ -67,7 +71,6 @@ public class ParserInternational extends Parser
 		{
 			try 
 			{
-				br = new BufferedReader(new FileReader(fileToParse));
 				String sCurrentLine;
 				while ((sCurrentLine = br.readLine()) != null) 
 				{

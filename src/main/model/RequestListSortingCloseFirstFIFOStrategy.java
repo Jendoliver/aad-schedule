@@ -1,6 +1,5 @@
 package model;
 
-import globals.Configuration;
 import globals.InputStrings;
 
 /**

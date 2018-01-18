@@ -1,13 +1,15 @@
 package view;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import globals.CalendarInfo;
 import globals.Configuration;
-import globals.Constants;
+import globals.Constants.FileNames;
 import model.OutputGenerator;
 import model.RequestList;
 import model.RequestPoliceman;
+import model.RoomSchedule;
 import model.parsers.ParserConfig;
 import model.parsers.ParserInternational;
 import model.parsers.ParserRequests;
@@ -23,11 +25,11 @@ public class App
 	public static void main(String[] args) 
 	{
 		// Parse the configuration file and set Configuration values
-		ParserConfig parserConfig = new ParserConfig(Constants.FileNames.CONFIG);
+		ParserConfig parserConfig = new ParserConfig(FileNames.CONFIG);
 		parserConfig.parse();
 		
 		// Parse an international file with INPUT_LANG extension and set InputStrings values
-		ParserInternational parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE + Configuration.INPUT_LANG, true);
+		ParserInternational parserInternational = new ParserInternational((FileNames.INTERNATIONAL_PRE.getName() + Configuration.INPUT_LANG), true);
 		parserInternational.parse();
 		
 		// Setup CalendarInfo
@@ -39,23 +41,25 @@ public class App
 		CalendarInfo.MONTH_FIRST_DAY_OF_WEEK = cal.get(Calendar.DAY_OF_WEEK);
 		
 		// Parse an international file with OUTPUT_LANG extension and set OutputStrings values
-		parserInternational = new ParserInternational(Constants.FileNames.INTERNATIONAL_PRE + Configuration.OUTPUT_LANG, false);
+		parserInternational = new ParserInternational(FileNames.INTERNATIONAL_PRE.getName() + Configuration.OUTPUT_LANG, false);
 		parserInternational.parse();
 		
 		// Parse the request files
-		ParserRequests parserRequests = new ParserRequests(Constants.FileNames.REQUESTS);
+		ParserRequests parserRequests = new ParserRequests(FileNames.REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		
 		// Sort the requests by priority
 		requestList = requestList.sort();
 		
 		// Investigate the collisions of the requests and solve them
-		RequestList processedRequestList = RequestPoliceman.process(requestList);
+		RequestPoliceman requestPoliceman = new RequestPoliceman();
+		requestPoliceman.process(requestList);
+		Map<String, RoomSchedule> roomSchedules = requestPoliceman.getRoomSchedules();
 		
 		// Print the calendar
 		OutputGenerator outputGenerator = new OutputGenerator();
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
-		outputGenerator.print(processedRequestList);
+		outputGenerator.print(roomSchedules);
 		
 	}
 }
