@@ -9,18 +9,20 @@ import org.junit.Test;
 
 import globals.Configuration;
 import globals.Constants;
+import globals.CalendarInfo;
+import globals.InputStrings;
 import model.RequestList;
 import model.parsers.ParserRequests;
 
 public class ParserRequestsTests 
 {
 	// UNCOMMENT TO START TESTING
-	/*private final List<String> GOOD_REQUESTS_ESP = 
+	private final List<String> GOOD_REQUESTS_ESP = 
 			Arrays.asList("Cerrado Sala1 01/01/2018 31/01/2018 LMXJVSD 00-07_22-24", 
 			"ReunionJava Sala1 10/01/2018 16/01/2018 XJV 10-16_21-22");
 	
 	private final List<String> GOOD_REQUESTS_CAT = 
-			Arrays.asList("Tancat Sala1 01/01/2018 31/01/2018 DMCJVSG 00-07_22-24\r\n",
+			Arrays.asList("Tancat Sala1 01/01/2018 31/01/2018 DMCJVSG 00-07_22-24",
 			"ReunionJava Sala1 10/01/2018 16/01/2018 CJV 10-16_21-22");
 			
 	private final List<String> GOOD_REQUESTS_ENG = 
@@ -64,6 +66,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ESP";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "L";
+		InputStrings.TUESDAY = "M";
+		InputStrings.WEDNESDAY = "X";
+		InputStrings.THURSDAY = "J";
+		InputStrings.FRIDAY = "V";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "D";
 		ParserRequests parserRequests = new ParserRequests(GOOD_REQUESTS_ESP);
 		RequestList requestList = parserRequests.parse();
 		assertEquals("There should be two requests!", 2, requestList.size());
@@ -75,6 +85,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "CAT";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "D";
+		InputStrings.TUESDAY = "M";
+		InputStrings.WEDNESDAY = "C";
+		InputStrings.THURSDAY = "J";
+		InputStrings.FRIDAY = "V";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "G";
 		ParserRequests parserRequests = new ParserRequests(GOOD_REQUESTS_CAT);
 		RequestList requestList = parserRequests.parse();
 		assertEquals("There should be two requests! Is INPUT_LANG considered?", 2, requestList.size());
@@ -86,6 +104,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(GOOD_REQUESTS_ENG);
 		RequestList requestList = parserRequests.parse();
 		assertEquals("There should be two requests! Is INPUT_LANG considered?", 2, requestList.size());
@@ -97,9 +123,16 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_ARGS_NUM_REQUESTS);
 		RequestList requestList = parserRequests.parse();
-		assertTrue("Requests must have exactly 6 parameters.", requestList.isEmpty());
+		assertEquals("Requests must have exactly 6 parameters. There should be 1 request!",1, requestList.size());
 	}
 	
 	@Test
@@ -108,9 +141,17 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_DATE_FORMAT_REQUESTS);
 		RequestList requestList = parserRequests.parse();
-		assertTrue("Date format should be dd/mm/yyyy or d/m/yyyy (parseInt is key).", requestList.isEmpty());
+		assertTrue("Date format should be dd/mm/yyyy or d/m/yyyy (parseInt is key). There are "+requestList.size()+" requests.", requestList.isEmpty());
 	}
 	
 	@Test
@@ -119,10 +160,18 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_DAY_MASK_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		assertTrue("A day mask can only contain InputStrings, can't contain repeated days even if correct "
-				+ "and can't contain more than 7 days.", requestList.isEmpty());
+				+ "and can't contain more than 7 days. It added" + requestList.size()+ " requests.", requestList.isEmpty());
 	}
 	
 	@Test
@@ -131,6 +180,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(OUT_OF_BOUNDS_DATE_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		assertTrue("The month to process has to be comprended by the dateFrame of the request", requestList.isEmpty());
@@ -142,6 +199,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "01";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 31;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_HOUR_FRAMES_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		assertTrue("No more than " + Constants.MAX_HOUR_FRAME_NUM + " hour frames shall pass.", requestList.isEmpty());
@@ -153,6 +218,14 @@ public class ParserRequestsTests
 		Configuration.MONTH_TO_PROCESS = "02";
 		Configuration.YEAR_TO_PROCESS = "2018";
 		Configuration.INPUT_LANG = "ENG";
+		CalendarInfo.MONTH_DAY_NUM = 28;
+		InputStrings.MONDAY = "M";
+		InputStrings.TUESDAY = "T";
+		InputStrings.WEDNESDAY = "W";
+		InputStrings.THURSDAY = "H";
+		InputStrings.FRIDAY = "F";
+		InputStrings.SATURDAY = "S";
+		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(CLAMP_NEEDED_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		
@@ -163,10 +236,10 @@ public class ParserRequestsTests
 		assertEquals("Left day (as well as right) should be clamped when the month is contained in the date",
 				1, requestList.get(0).dayFrame.startDay);
 		assertEquals("Right day (as well as left) should be clamped when the month is contained in the date",
-				31, requestList.get(0).dayFrame.endDay);
+				CalendarInfo.MONTH_DAY_NUM, requestList.get(0).dayFrame.endDay);
 		assertEquals("Left day should be clamped when only a left part of the month is contained in the date",
 				1, requestList.get(1).dayFrame.startDay);
 		assertEquals("Right day should be clamped when only a right part of the month is contained in the date",
-				31, requestList.get(2).dayFrame.startDay);
-	}*/
+				CalendarInfo.MONTH_DAY_NUM, requestList.get(2).dayFrame.endDay);
+	}
 }
