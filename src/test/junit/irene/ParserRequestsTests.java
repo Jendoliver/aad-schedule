@@ -132,7 +132,7 @@ public class ParserRequestsTests
 		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_ARGS_NUM_REQUESTS);
 		RequestList requestList = parserRequests.parse();
-		assertTrue("Requests must have exactly 6 parameters.", requestList.isEmpty());
+		assertEquals("Requests must have exactly 6 parameters. There should be 1 request!",1, requestList.size());
 	}
 	
 	@Test
@@ -151,7 +151,7 @@ public class ParserRequestsTests
 		InputStrings.SUNDAY = "N";
 		ParserRequests parserRequests = new ParserRequests(BAD_DATE_FORMAT_REQUESTS);
 		RequestList requestList = parserRequests.parse();
-		assertTrue("Date format should be dd/mm/yyyy or d/m/yyyy (parseInt is key).", requestList.isEmpty());
+		assertTrue("Date format should be dd/mm/yyyy or d/m/yyyy (parseInt is key). There are "+requestList.size()+" requests.", requestList.isEmpty());
 	}
 	
 	@Test
@@ -171,7 +171,7 @@ public class ParserRequestsTests
 		ParserRequests parserRequests = new ParserRequests(BAD_DAY_MASK_REQUESTS);
 		RequestList requestList = parserRequests.parse();
 		assertTrue("A day mask can only contain InputStrings, can't contain repeated days even if correct "
-				+ "and can't contain more than 7 days.", requestList.isEmpty());
+				+ "and can't contain more than 7 days. It added" + requestList.size()+ " requests.", requestList.isEmpty());
 	}
 	
 	@Test
@@ -240,6 +240,6 @@ public class ParserRequestsTests
 		assertEquals("Left day should be clamped when only a left part of the month is contained in the date",
 				1, requestList.get(1).dayFrame.startDay);
 		assertEquals("Right day should be clamped when only a right part of the month is contained in the date",
-				28, requestList.get(2).dayFrame.startDay);
+				28, requestList.get(2).dayFrame.endDay);
 	}
 }

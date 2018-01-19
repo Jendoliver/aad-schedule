@@ -107,12 +107,13 @@ public class ParserRequests extends Parser
 			//split("") will return an empty first value, so [0] doesn't count, start at 1
 			int cont = 0;
 			String[] dayMaskSplited = dayMask.split("");
-			if(dayMaskSplited.length <= 8 && dayMaskSplited.length > 0) {
-				String day2 = "";
+			if(dayMaskSplited.length <= 7 && dayMaskSplited.length > 0) {
 				for(String day : dayMaskSplited) {
+					cont = 0;
 					//CHECK IF THE DAY IS REPEATED IN THE DAYMASK
 					for(int j = 0; j < dayMaskSplited.length; j++) {
 						if(day.equals(dayMaskSplited[j])) {
+							cont++;
 							if(cont == 2) {
 								throw new BadFormattedRequestException(Reason.DAY_MASK_REPEATED_DAY);
 							}
@@ -184,63 +185,58 @@ public class ParserRequests extends Parser
 			int yearStart = isParseable(dayFrameStart[2]);
 			int yearFinish = isParseable(dayFrameFinish[2]);
 			int yearToProcess = isParseable(Configuration.YEAR_TO_PROCESS);
-
-			if(yearStart > yearToProcess) {
-				throw new BadFormattedRequestException(Reason.YEAR_OUT_OF_BOUNDS);
-			}
-			else if(yearStart < yearToProcess){
-				monthStart = monthToProcess;
-				dayStart = 1;
-			}else {
-				if(monthFinish == 0 && monthStart == 0) {
-					throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
+			if(isMonthPlausible(monthStart) && isMonthPlausible(monthFinish)) {
+				if(yearStart > yearToProcess) {
+					throw new BadFormattedRequestException(Reason.YEAR_OUT_OF_BOUNDS);
+				}
+				else if(yearStart < yearToProcess){
+					monthStart = monthToProcess;
+					dayStart = 1;
 				}else {
-					if(monthStart > monthToProcess) {
-						throw new BadFormattedRequestException(Reason.MONTH_OUT_OF_BOUNDS);
+					if(monthFinish == 0 && monthStart == 0) {
+						throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
 					}else {
-						if(monthStart < monthToProcess) {
-							dayStart = 1;
-							monthStart = monthToProcess;
+						if(monthStart > monthToProcess) {
+							throw new BadFormattedRequestException(Reason.MONTH_OUT_OF_BOUNDS);
+						}else {
+							if(monthStart < monthToProcess) {
+								dayStart = 1;
+								monthStart = monthToProcess;
+							}
 						}
-					}
-					if(monthFinish < monthToProcess) {
-						throw new BadFormattedRequestException(Reason.MONTH_OUT_OF_BOUNDS);
-					}else {
-						if(monthFinish > monthToProcess) {
-							dayFinish = CalendarInfo.MONTH_DAY_NUM;
-							monthFinish = monthToProcess;
+						if(monthFinish < monthToProcess) {
+							throw new BadFormattedRequestException(Reason.MONTH_OUT_OF_BOUNDS);
+						}else {
+							if(monthFinish > monthToProcess) {
+								dayFinish = CalendarInfo.MONTH_DAY_NUM;
+								monthFinish = monthToProcess;
+							}
 						}
 					}
 				}
-			}
-			if(isCorrectDayInMonth(dayStart) && isCorrectDayInMonth(dayFinish)) {
-				dayFrameForRequest =  request.new DayFrame(dayStart, dayFinish);
+				if(isCorrectDayInMonth(dayStart) && isCorrectDayInMonth(dayFinish)) {
+					dayFrameForRequest =  request.new DayFrame(dayStart, dayFinish);
+				}else {
+					throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
+				}
 			}else {
-				throw new BadFormattedRequestException(Reason.DAY_FORMAT_INCORRECT);
+				throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
 			}
+
 		}else {
 			throw new BadFormattedRequestException(Reason.FORMAT_INCORRECT);
 		}
 		return dayFrameForRequest;
 	}
 
-	//CHECKS IF THE MONTH IS THE SAME AS THE CONFIGURED ONE
-//	private boolean isCorrectMonth(String monthToCheck) {
-//		if(monthToCheck.equals(Configuration.MONTH_TO_PROCESS)) {
-//			return true;
-//		}else {
-//			return false;
-//		}
-//	}
-
-	//CHECKS IF THE YEAR IS THE SAME AS THE CONFIGURED ONE
-//	private boolean isCorrectYear(String yearToCheck) {
-//		if(yearToCheck.equals(Configuration.YEAR_TO_PROCESS)) {
-//			return true;		
-//		}else {
-//			return false;
-//		}
-//	}
+	//CHECKS IF THE MONTH IS PLAUSIBLE
+	private boolean isMonthPlausible(int month) {
+		if(month >=1 && month <=12) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	//CHECKS IF THE STRING IS PARSEABLE
 	private int isParseable(String toParse) {
