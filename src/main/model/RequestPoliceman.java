@@ -65,34 +65,6 @@ public class RequestPoliceman
 			}
 		}
 	}
-<<<<<<< HEAD
-	
-	// FIXME not checking dayframe??
-	/*private List<Integer> getExactDays(Request request)
-	{
-		List<Integer> exactDays = new ArrayList<>();
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1); // January = 0
-		calendar.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
-		int maxWeek = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
-		for(int i = 1; i <= calendar.getActualMaximum(Calendar.WEEK_OF_MONTH); i++) // Correcto
-		{
-			calendar.set(Calendar.WEEK_OF_MONTH, i);
-			int j = calendar.get(Calendar.WEEK_OF_MONTH);
-			for(RequestDays requestDay : request.requestedDays)
-			{
-				calendar.set(Calendar.DAY_OF_WEEK, requestDay.ordinal());
-				int day = calendar.get(Calendar.DAY_OF_MONTH); // CHECK esto deberia devolver algo menor a 1 si el dia no concuerda. Mirar Calendar.lenient, puede servir para detectarlo
-				if(day >= request.dayFrame.startDay && day <= request.dayFrame.endDay)
-					exactDays.add(day);
-			}
-		}
-		return exactDays;
-	}*/
-	
-=======
-
->>>>>>> 1b84ea39738da281f7d340155f5717363e18bf95
 	private List<Integer> getExactDays(Request request)
 	{
 		List<Integer> exactDays = new ArrayList<>();

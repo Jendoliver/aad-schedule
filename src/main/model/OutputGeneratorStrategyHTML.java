@@ -48,25 +48,5 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			.append(OutputStrings.Days.SATURDAY).append("</th></thead>");
 	}
 	
-<<<<<<< HEAD
-	// TODO make moar beatiful
-	private void printNonMonthDays(int num)
-	{/*
-=======
-	// TODO implement
-	/*private void printNonMonthDays(int num)
-	{
->>>>>>> 1b84ea39738da281f7d340155f5717363e18bf95
-		for(int i = 0; i < num; i++) {
-			output.append("<td style='background-color: black;'/>)
-		}
-		
-		// FIXME PLIS
-	}
-	
-	private void printToFile()
-	{
-		
-	}*/
 
 }
