@@ -134,7 +134,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		}
 		
 		// Set firstDayOfWeek value to be used in the next week;
-		firstDayOfWeek = firstDayOfWeek == 1 ? 8 : thisWeekMonthDayNum + 2;
+		firstDayOfWeek = firstDayOfWeek == 1 ? 8 : thisWeekMonthDayNum + 1;
 		fullFileOutput.append("</tbody>");
 		fullFileOutput.append("</table>");
 	}

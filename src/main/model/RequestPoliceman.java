@@ -68,7 +68,8 @@ public class RequestPoliceman
 	private void processRequestOnSchedule(Request request, RoomSchedule schedule) 
 	{
 		// TESTME
-		for(int day : getExactDays(request))
+		List<Integer> exactDays = getExactDays(request);
+		for(int day : exactDays)
 		{
 			for(HourFrame hourFrame : request.hourFrames)
 			{
