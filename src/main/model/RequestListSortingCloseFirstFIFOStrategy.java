@@ -34,10 +34,6 @@ public class RequestListSortingCloseFirstFIFOStrategy implements RequestListSort
 				activityNameComparator = requestList.get(0).activityName;
 			}
 		}
-		for (Request request : newRequestList)
-		{
-			System.out.println(request.activityName);
-		}
 		
 		return newRequestList;
 	}

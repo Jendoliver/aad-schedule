@@ -88,6 +88,7 @@ public class RequestPoliceman
 		}
 	}
 
+	// FIXME bug here
 	private List<Integer> getExactDays(Request request)
 	{
 		List<Integer> exactDays = new ArrayList<>();
@@ -97,7 +98,8 @@ public class RequestPoliceman
 		
 		List<Integer> firstDays = new ArrayList<>();
 		
-		for(int day = request.dayFrame.startDay; day < request.dayFrame.startDay + 7 && day < CalendarInfo.MONTH_DAY_NUM; day++)
+		// Iterate for a week, but break if this gets out of month or out of the request dayFrame itself
+		for(int day = request.dayFrame.startDay; day < request.dayFrame.startDay + 7 && day < CalendarInfo.MONTH_DAY_NUM && day <= request.dayFrame.endDay; day++)
 		{
 			calendar.set(Calendar.DAY_OF_MONTH, day);
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);

@@ -24,6 +24,9 @@ public class App
 {
 	public static void main(String[] args) 
 	{
+		// Benchmark init
+		long runTimerInit = System.currentTimeMillis();
+		
 		// Parse the configuration file and set Configuration values
 		ParserConfig parserConfig = new ParserConfig(FileNames.CONFIG);
 		parserConfig.parse();
@@ -65,5 +68,7 @@ public class App
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
 		outputGenerator.print(roomSchedules);
 		
+		// Benchmark print
+		System.out.println("\n\n" + requestList.size() + " well-formatted requests from " + roomSchedules.keySet().size() + " different schedule/s processed in " + (System.currentTimeMillis() - runTimerInit) + "ms");
 	}
 }
