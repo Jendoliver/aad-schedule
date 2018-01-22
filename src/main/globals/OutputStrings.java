@@ -41,6 +41,9 @@ public final class OutputStrings
 		public static String DECEMBER;
 	}
 	
+	// 005
+	public static String CLOSE_KEY;
+	
 	public static String numericMonthToFullString(int month)
 	{
 		if(month == 1) return Months.JANUARY;

@@ -123,7 +123,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 				if(request != null) 
 				{
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
-						fullFileOutput.append("<td class='closed'>").append(request.activityName).append("</td>");
+						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
 						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
 				}
@@ -160,7 +160,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 				if(request != null) 
 				{
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
-						fullFileOutput.append("<td class='closed'>").append(request.activityName).append("</td>");
+						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
 						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
 				}
@@ -200,7 +200,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 				if(request != null) 
 				{
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
-						fullFileOutput.append("<td class='closed'>").append(request.activityName).append("</td>");
+						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
 						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
 				}
