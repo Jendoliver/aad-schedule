@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		// Add file h1 (roomName) and h3 (year, month)
 		fullFileOutput.append("<h1>").append(roomName).append("</h1>");
 		fullFileOutput.append("<h3>").append(Configuration.YEAR_TO_PROCESS).append(", ")
-						.append(OutputStrings.numericMonthToFullString(Integer.parseInt(Configuration.MONTH_TO_PROCESS)));
+						.append(OutputStrings.numericMonthToFullString(Integer.parseInt(Configuration.MONTH_TO_PROCESS))).append("</h3>");
 		fullFileOutput.append("<div class='container-fluid'>\r\n");
 		
 		// Get the beginning day of the calendar (it can be a day from the previous month) to set currentDay
@@ -66,7 +68,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		// If the month starts on Sunday, the calendar will start at exactly the month to process. Else, it will contain part of the previous month.
 		int lastDayPreviousMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		firstDayOfWeek = CalendarInfo.MONTH_FIRST_DAY_OF_WEEK == 1 ?
-						CalendarInfo.MONTH_FIRST_DAY_OF_WEEK : lastDayPreviousMonth - (CalendarInfo.MONTH_FIRST_DAY_OF_WEEK - 1);
+						CalendarInfo.MONTH_FIRST_DAY_OF_WEEK : lastDayPreviousMonth - (CalendarInfo.MONTH_FIRST_DAY_OF_WEEK - 2);
 		
 		// Alias to read better
 		int firstWeek = CalendarInfo.MONTH_FIRST_WEEK_NUMBER;
@@ -96,7 +98,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private void printFirstWeek(int weekNum)
 	{
 		fullFileOutput.append("<table class='table-condensed table-bordered table-striped'>");
-		printTableHeader(firstDayOfWeek);
+		printTableHeader(firstDayOfWeek, weekNum);
 		fullFileOutput.append("<tbody>");
 		
 		// Get the number of days of the previous month contained on this week
@@ -112,7 +114,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			
 			// Fill the out of month days on this hour
 			for(int i = 0; i < prevMonthDayNum; i ++)
-				fullFileOutput.append("<td class'outOfMonth'></td>");
+				fullFileOutput.append("<td class='outOfMonth'></td>");
 			
 			// Fill the days within this month on this hour
 			for(int day = 1; day <= thisWeekMonthDayNum; day++)
@@ -132,7 +134,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		}
 		
 		// Set firstDayOfWeek value to be used in the next week;
-		firstDayOfWeek += 7;
+		firstDayOfWeek = firstDayOfWeek == 1 ? 8 : thisWeekMonthDayNum + 2;
 		fullFileOutput.append("</tbody>");
 		fullFileOutput.append("</table>");
 	}
@@ -144,7 +146,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private void printWeek(int weekNum)
 	{
 		fullFileOutput.append("<table class='table-condensed table-bordered table-striped'>");
-		printTableHeader(firstDayOfWeek);
+		printTableHeader(firstDayOfWeek, weekNum);
 		fullFileOutput.append("<tbody>");
 		
 		for(int hour = 0; hour < 24; hour++)
@@ -180,13 +182,13 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private void printLastWeek(int weekNum)
 	{
 		fullFileOutput.append("<table class='table-condensed table-bordered table-striped'>");
-		printTableHeader(firstDayOfWeek);
+		printTableHeader(firstDayOfWeek, weekNum);
 		fullFileOutput.append("<tbody>");
 		
 		// Get the number of days of the next month contained on this week
-		int nextMonthDayNum = 7 - CalendarInfo.MONTH_LAST_DAY_OF_WEEK;
+		int nextMonthDayNum = 8 - CalendarInfo.MONTH_LAST_DAY_OF_WEEK;
 		// Get the number of days of this month contained on this week
-		int thisWeekMonthDayNum = CalendarInfo.MONTH_LAST_DAY_OF_WEEK;
+		int thisWeekMonthDayNum = CalendarInfo.MONTH_LAST_DAY_OF_WEEK - 1;
 		for(int hour = 0; hour < 24; hour++)
 		{
 			fullFileOutput.append("<tr>");
@@ -208,7 +210,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			
 			// Fill the out of month days on this hour
 			for(int i = 0; i < nextMonthDayNum; i ++)
-				fullFileOutput.append("<td class'outOfMonth'></td>");
+				fullFileOutput.append("<td class='outOfMonth'></td>");
 						
 			fullFileOutput.append("</tr>");
 		}
@@ -218,31 +220,37 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		fullFileOutput.append("</table>");
 	}
 
-	private void printTableHeader(int firstDay)
+	private void printTableHeader(int firstDay, int weekNum)
 	{
 		// TODO refactor OutputStrings.Days to inherit from ArrayList so it can be iterated
 		
 		int day = firstDay;
 		fullFileOutput.append("<thead>");
+		fullFileOutput.append("<th>").append("Week ").append(weekNum).append("</th>");
 		fullFileOutput.append("<th>").append(OutputStrings.Days.SUNDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.MONDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.TUESDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.WEDNESDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.THURSDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.FRIDAY).append(" ").append(day).append("</th>");
-		day = day + 1 % CalendarInfo.MONTH_DAY_NUM;
+		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.SATURDAY).append(" ").append(day).append("</th>");
 		fullFileOutput.append("</thead>");
 	}
 	
 	private void writeToFile(String fileName, String in)
 	{
-		
+		try(  PrintWriter out = new PrintWriter( fileName )  ){
+		    out.println( in );
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

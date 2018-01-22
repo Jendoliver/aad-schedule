@@ -35,7 +35,7 @@ public class App
 		// Setup CalendarInfo
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS));
+		cal.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1);
 		cal.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
 		CalendarInfo.MONTH_DAY_NUM = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		CalendarInfo.MONTH_WEEKS_NUMBER = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
