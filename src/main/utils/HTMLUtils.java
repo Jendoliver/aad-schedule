@@ -21,10 +21,11 @@ public class HTMLUtils
 			"    \r\n" + 
 			"        th { width: 200px; height: 100px; text-align: center; }\r\n" + 
 			"        td { width: 200px; height: 50px; text-align: center; }\r\n" + 
-			"        table { margin: auto; margin-bottom: 100px;}\r\n" + 
+			"        table { margin: auto; margin-bottom: 100px; }\r\n" + 
 			"        \r\n" + 
 			"        .hourFrame { font-style: oblique; font-weight: bold; }\r\n" + 
 			"        .outOfMonth { background-color: rgba(0, 0, 0, 0.5); }\r\n" + 
-			"        .closed { background-color: yellow; }\r\n" + 
+			"        .closed { background-color: lemonchiffon; }\r\n" + 
+			"        .requested { background-color: palegreen; }\r\n" + 
 			"    </style>";
 }
