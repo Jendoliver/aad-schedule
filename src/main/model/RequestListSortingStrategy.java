@@ -5,7 +5,7 @@ package model;
  * RequestPoliceman, sorting the list by the priority of the requests defined in the current policy so it can be read only once.
  * 
  * @author Jandol
- *
+ * 
  */
 public interface RequestListSortingStrategy
 {
