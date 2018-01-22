@@ -67,7 +67,7 @@ public class ParserInternational extends Parser
 			}
 		}
 		
-		else // Parse fileToParse and fill OutputStrings(001, 002, 004)
+		else // Parse fileToParse and fill OutputStrings(001, 002, 004, 005, 006)
 		{
 			try 
 			{
@@ -109,6 +109,10 @@ public class ParserInternational extends Parser
 					else if(configEntry[0].equals("005")) // 005 -> Close code
 					{
 		                OutputStrings.CLOSE_KEY = configEntry[1];
+					}
+					else if(configEntry[0].equals("006")) // 006 -> Week code
+					{
+		                OutputStrings.WEEK = configEntry[1];
 					}
 	            }
 			} catch (IOException e) {

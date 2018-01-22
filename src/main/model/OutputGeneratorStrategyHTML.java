@@ -55,11 +55,11 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		fullFileOutput.append("<body>");
 		fullFileOutput.append(HTMLUtils.OUT_BLACK_CLOSED_YELLOW_STYLE);
 		
-		// Add file h1 (roomName) and h3 (year, month)
+		// Open the container and add file h1 (roomName) and h3 (year, month)
+		fullFileOutput.append("<div class='container-fluid'>\r\n");
 		fullFileOutput.append("<h1>").append(roomName).append("</h1>");
 		fullFileOutput.append("<h3>").append(Configuration.YEAR_TO_PROCESS).append(", ")
-						.append(OutputStrings.numericMonthToFullString(Integer.parseInt(Configuration.MONTH_TO_PROCESS))).append("</h3>");
-		fullFileOutput.append("<div class='container-fluid'>\r\n");
+		.append(OutputStrings.numericMonthToFullString(Integer.parseInt(Configuration.MONTH_TO_PROCESS))).append("</h3>");
 		
 		// Get the beginning day of the calendar (it can be a day from the previous month) to set currentDay
 		Calendar calendar = Calendar.getInstance();
@@ -224,7 +224,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		
 		int day = firstDay;
 		fullFileOutput.append("<thead>");
-		fullFileOutput.append("<th>").append("Week ").append(weekNum).append("</th>");
+		fullFileOutput.append("<th>").append(OutputStrings.WEEK).append(" ").append(weekNum).append("</th>");
 		fullFileOutput.append("<th>").append(OutputStrings.Days.SUNDAY).append(" ").append(day).append("</th>");
 		day = day + 1 > CalendarInfo.MONTH_DAY_NUM ? 1 : day + 1;
 		fullFileOutput.append("<th>").append(OutputStrings.Days.MONDAY).append(" ").append(day).append("</th>");
