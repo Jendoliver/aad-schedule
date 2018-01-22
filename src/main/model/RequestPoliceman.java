@@ -88,7 +88,6 @@ public class RequestPoliceman
 		}
 	}
 
-	// FIXME bug here
 	private List<Integer> getExactDays(Request request)
 	{
 		List<Integer> exactDays = new ArrayList<>();

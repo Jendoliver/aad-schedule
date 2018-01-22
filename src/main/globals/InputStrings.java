@@ -42,7 +42,6 @@ public final class InputStrings
 				|| day.equals(SUNDAY);
 	}
 	
-	// TODO check this, as it could cleanly replace the language strategy VVVVVV
 	/**
 	 * This function should be called every time that we read one VALID day (aka previously tested with isValidDay) from a request's day mask
 	 * to transform it into a RequestDays so we can push it into the List<RequestDays> from Request

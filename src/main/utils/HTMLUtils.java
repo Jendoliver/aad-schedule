@@ -8,13 +8,10 @@ package utils;
  */
 public class HTMLUtils 
 {
-	public static final String BOOTSTRAP_HEAD = "<head>\r\n" + 
-			"    <meta charset='UTF-8'>\r\n" + 
+	public static final String BOOTSTRAP_HEAD = "    <meta charset='UTF-8'>\r\n" + 
 			"    <meta name='viewport' content='width=device-width, initial-scale=1.0'>\r\n" + 
 			"    <meta http-equiv='X-UA-Compatible' content='ie=edge'>\r\n" + 
-			"    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy' crossorigin='anonymous'>\r\n" + 
-			"    <title>Schedule</title>\r\n" + 
-			"</head>";
+			"    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy' crossorigin='anonymous'>\r\n";
 	
 	public static final String OUT_BLACK_CLOSED_YELLOW_STYLE = "<style type='text/css'>\r\n" + 
 			"        h3 { color: grey; font-style: oblique; }\r\n" + 

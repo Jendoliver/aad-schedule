@@ -49,9 +49,11 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		// Assign working schedule to be able to work on it through the different methods
 		currentRoomSchedule = schedule;
 		
-		// Add HTML info, bootstrap head and custom style
-		fullFileOutput.append("<!DOCTYPE html>\r\n<html lang='en'>");
-		fullFileOutput.append(HTMLUtils.BOOTSTRAP_HEAD); // FIXME this prints the title independently from the language, check OutputStrings.TITLE
+		// Add HTML info, bootstrap head, title and custom style
+		fullFileOutput.append("<!DOCTYPE html>\r\n<html lang='en'><head>\r\n");
+		fullFileOutput.append(HTMLUtils.BOOTSTRAP_HEAD);
+		fullFileOutput.append("<title>").append(OutputStrings.TITLE).append("</title>");
+		fullFileOutput.append("</head>");
 		fullFileOutput.append("<body>");
 		fullFileOutput.append(HTMLUtils.OUT_BLACK_CLOSED_YELLOW_STYLE);
 		
@@ -246,7 +248,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		try(  PrintWriter out = new PrintWriter( fileName )  ){
 		    out.println( in );
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			// TODO log something useful
 			e.printStackTrace();
 		}
 	}
