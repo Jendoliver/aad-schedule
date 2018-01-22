@@ -188,7 +188,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		// Get the number of days of the next month contained on this week
 		int nextMonthDayNum = 8 - CalendarInfo.MONTH_LAST_DAY_OF_WEEK;
 		// Get the number of days of this month contained on this week
-		int thisWeekMonthDayNum = CalendarInfo.MONTH_LAST_DAY_OF_WEEK - 1;
+		int thisWeekMonthDayNum = CalendarInfo.MONTH_LAST_DAY_OF_WEEK;
 		for(int hour = 0; hour < 24; hour++)
 		{
 			fullFileOutput.append("<tr>");
@@ -209,13 +209,11 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 			}
 			
 			// Fill the out of month days on this hour
-			for(int i = 0; i < nextMonthDayNum; i ++)
+			for(int i = 0; i < nextMonthDayNum - 1; i ++)
 				fullFileOutput.append("<td class='outOfMonth'></td>");
 						
 			fullFileOutput.append("</tr>");
 		}
-		
-		firstDayOfWeek = firstDayOfWeek + 7;
 		fullFileOutput.append("</tbody>");
 		fullFileOutput.append("</table>");
 	}
