@@ -24,6 +24,9 @@ public class App
 {
 	public static void main(String[] args) 
 	{
+		// Benchmark init
+		long runTimerInit = System.currentTimeMillis();
+		
 		// Parse the configuration file and set Configuration values
 		ParserConfig parserConfig = new ParserConfig(FileNames.CONFIG);
 		parserConfig.parse();
@@ -35,10 +38,14 @@ public class App
 		// Setup CalendarInfo
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS));
+		cal.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1);
 		cal.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
-		CalendarInfo.MONTH_DAY_NUM = cal.getActualMaximum(Calendar.MONTH);
+		CalendarInfo.MONTH_DAY_NUM = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		CalendarInfo.MONTH_WEEKS_NUMBER = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
 		CalendarInfo.MONTH_FIRST_DAY_OF_WEEK = cal.get(Calendar.DAY_OF_WEEK);
+		CalendarInfo.MONTH_FIRST_WEEK_NUMBER = cal.get(Calendar.WEEK_OF_YEAR);
+		cal.set(Calendar.DAY_OF_MONTH, CalendarInfo.MONTH_DAY_NUM);
+		CalendarInfo.MONTH_LAST_DAY_OF_WEEK = cal.get(Calendar.DAY_OF_WEEK);
 		
 		// Parse an international file with OUTPUT_LANG extension and set OutputStrings values
 		parserInternational = new ParserInternational(FileNames.INTERNATIONAL_PRE.getName() + Configuration.OUTPUT_LANG, false);
@@ -61,5 +68,7 @@ public class App
 		outputGenerator.setStrategy(Configuration.OUTPUT_GENERATOR_STRATEGY);
 		outputGenerator.print(roomSchedules);
 		
+		// Benchmark print
+		System.out.println("\n\n" + requestList.size() + " well-formatted request/s from " + roomSchedules.keySet().size() + " different schedule/s processed in " + (System.currentTimeMillis() - runTimerInit) + "ms");
 	}
 }

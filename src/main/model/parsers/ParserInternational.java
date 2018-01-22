@@ -40,7 +40,7 @@ public class ParserInternational extends Parser
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
 					String[] configEntry = sCurrentLine.split(";");
-					if(configEntry[0].equalsIgnoreCase("003")) //003 -> Days code 
+					if(configEntry[0].equals("003")) //003 -> Days code 
 					{
 		                parameters = configEntry[1].split(",");
 		                InputStrings.MONDAY = parameters[0];
@@ -51,7 +51,7 @@ public class ParserInternational extends Parser
 		                InputStrings.SATURDAY = parameters[5]; 
 		                InputStrings.SUNDAY = parameters[6]; 
 					}
-					else if(configEntry[0].equalsIgnoreCase("005")) //005 -> Close code
+					else if(configEntry[0].equals("005")) //005 -> Close code
 					{
 						InputStrings.CLOSE_KEY = configEntry[1];
 					}
@@ -67,7 +67,7 @@ public class ParserInternational extends Parser
 			}
 		}
 		
-		else // Parse fileToParse and fill OutputStrings(001, 002, 004)
+		else // Parse fileToParse and fill OutputStrings(001, 002, 004, 005, 006)
 		{
 			try 
 			{
@@ -75,11 +75,11 @@ public class ParserInternational extends Parser
 				while ((sCurrentLine = br.readLine()) != null) 
 				{
 					String[] configEntry = sCurrentLine.split(";");
-					if(configEntry[0].equalsIgnoreCase("001")) // 001 -> Title Code
+					if(configEntry[0].equals("001")) // 001 -> Title Code
 					{
 		                OutputStrings.TITLE = configEntry[1];
 					}
-					else if(configEntry[0].equalsIgnoreCase("002")) // 002 -> Days (full) code
+					else if(configEntry[0].equals("002")) // 002 -> Days (full) code
 					{
 						parameters = configEntry[1].split(",");
 						OutputStrings.Days.MONDAY=parameters[0];
@@ -90,7 +90,7 @@ public class ParserInternational extends Parser
 						OutputStrings.Days.SATURDAY=parameters[5]; 
 						OutputStrings.Days.SUNDAY=parameters[6]; 
 					}
-					else if(configEntry[0].equalsIgnoreCase("004")) // 004 -> Month code
+					else if(configEntry[0].equals("004")) // 004 -> Month code
 					{
 						parameters = configEntry[1].split(",");
 						OutputStrings.Months.JANUARY=parameters[0];
@@ -105,6 +105,14 @@ public class ParserInternational extends Parser
 						OutputStrings.Months.OCTOBER=parameters[9];
 						OutputStrings.Months.NOVEMBER=parameters[10];
 						OutputStrings.Months.DECEMBER=parameters[11];
+					}
+					else if(configEntry[0].equals("005")) // 005 -> Close code
+					{
+		                OutputStrings.CLOSE_KEY = configEntry[1];
+					}
+					else if(configEntry[0].equals("006")) // 006 -> Week code
+					{
+		                OutputStrings.WEEK = configEntry[1];
 					}
 	            }
 			} catch (IOException e) {
