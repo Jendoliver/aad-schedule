@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globals.Configuration;
 import globals.Constants.FileNames;
 
@@ -16,6 +19,9 @@ import globals.Constants.FileNames;
  */
 public class ParserConfig extends Parser 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ParserConfig.class);
+	
 	public ParserConfig(FileNames fileToParse) {
 		this.fileToParse = fileToParse.getName();
 	}
@@ -50,12 +56,12 @@ public class ParserConfig extends Parser
 				}
             }
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			try {
 				br.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 	}

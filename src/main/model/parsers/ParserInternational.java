@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globals.InputStrings;
 import globals.OutputStrings;
 
@@ -17,6 +20,9 @@ import globals.OutputStrings;
  */
 public class ParserInternational extends Parser 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ParserInternational.class);
+	
 	private boolean isInput;
 	
 	public ParserInternational(String fileToParse, boolean isInput) {
@@ -57,12 +63,12 @@ public class ParserInternational extends Parser
 					}
 	            }
 			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
+				logger.error(e.getMessage());
+				} finally {
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
 		}

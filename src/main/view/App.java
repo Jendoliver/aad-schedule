@@ -3,6 +3,8 @@ package view;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;
+
 import globals.CalendarInfo;
 import globals.Configuration;
 import globals.Constants.FileNames;
@@ -22,8 +24,11 @@ import model.parsers.ParserRequests;
  */
 public class App 
 {
+	
 	public static void main(String[] args) 
 	{
+		BasicConfigurator.configure();
+				
 		// Benchmark init
 		long runTimerInit = System.currentTimeMillis();
 		

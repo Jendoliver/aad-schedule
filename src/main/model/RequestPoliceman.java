@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globals.CalendarInfo;
 import globals.Configuration;
 import model.Request.HourFrame;
@@ -46,6 +49,8 @@ import model.Request.HourFrame;
  */
 public class RequestPoliceman 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(RequestPoliceman.class);
 	private Map<String, RoomSchedule> roomSchedules = new HashMap<>();
 	
 	public RequestPoliceman() { }
@@ -81,7 +86,7 @@ public class RequestPoliceman
 					}
 					else
 					{
-						// TODO log incompatible request (already reserved)
+						logger.warn("incompatible request (already reserved)");
 					}
 				}
 			}

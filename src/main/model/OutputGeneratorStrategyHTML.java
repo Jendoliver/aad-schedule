@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globals.CalendarInfo;
 import globals.Configuration;
 import globals.InputStrings;
@@ -23,6 +26,9 @@ import utils.HTMLUtils;
  */
 public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(OutputGeneratorStrategyHTML.class);
+	
 	private StringBuilder fullFileOutput = new StringBuilder();
 	private int firstDayOfWeek = 0;
 	private RoomSchedule currentRoomSchedule = null;
@@ -250,7 +256,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		    out.println( in );
 		} catch (FileNotFoundException e) {
 			// TODO log something useful
-			e.printStackTrace();
+			logger.error("can't write to the file");
 		}
 	}
 
