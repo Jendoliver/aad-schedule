@@ -58,6 +58,8 @@ public class ParserRequests extends Parser
 		}
 		return acceptedRequests;
 	}
+	
+	public int getLoadedRequestsNumber() { return loadedRequests.size(); }
 
 	private void parse(String request) throws BadFormattedRequestException
 	{

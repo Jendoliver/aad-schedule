@@ -73,7 +73,6 @@ public class RequestPoliceman
 
 	private void processRequestOnSchedule(Request request, RoomSchedule schedule) 
 	{
-		// TESTME
 		List<Integer> exactDays = getExactDays(request);
 		int numHoursRequested = 0;
 		int numHoursAccepted = 0;
@@ -117,7 +116,7 @@ public class RequestPoliceman
 		{
 			calendar.set(Calendar.DAY_OF_MONTH, day);
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-			if(maskContainsDay(request.requestedDays, dayOfWeek - 1)) { // Parchako ( Calendar.SUNDAY = 1, pero RequestDays.SUNDAY = 0)
+			if(maskContainsDay(request.requestedDays, dayOfWeek - 1)) { // Calendar.SUNDAY = 1, but RequestDays.SUNDAY = 0) TODO solve this in a centralized place
 				firstDays.add(day);
 				exactDays.add(day);
 			}

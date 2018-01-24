@@ -3,6 +3,7 @@ package model;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -32,6 +33,8 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 	private StringBuilder fullFileOutput = new StringBuilder();
 	private int firstDayOfWeek = 0;
 	private RoomSchedule currentRoomSchedule = null;
+	private int tdColorIndex = 0;
+	private Map<String, HTMLUtils.ColorClassedTdOpenTag> requestPalette = new HashMap<>();
 	
 	@Override
 	public void print(Map<String, RoomSchedule> roomSchedules) 
@@ -62,6 +65,7 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 		fullFileOutput.append("</head>");
 		fullFileOutput.append("<body>");
 		fullFileOutput.append(HTMLUtils.OUT_BLACK_CLOSED_YELLOW_STYLE);
+		fullFileOutput.append(HTMLUtils.COLORS_CSS);
 		
 		// Open the container and add file h1 (roomName) and h3 (year, month)
 		fullFileOutput.append("<div class='container-fluid'>\r\n");
@@ -133,7 +137,14 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
 						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
-						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
+					{
+						if( ! requestPalette.containsKey(request.activityName))
+						{
+							tdColorIndex = (tdColorIndex + 1) % (HTMLUtils.ColorClassedTdOpenTag.values().length - 1);
+							requestPalette.put(request.activityName, HTMLUtils.ColorClassedTdOpenTag.values()[tdColorIndex]);
+						}
+						fullFileOutput.append(requestPalette.get(request.activityName).getHtml()).append(request.activityName).append("</td>");
+					}
 				}
 				else
 					fullFileOutput.append("<td></td>");
@@ -170,7 +181,14 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
 						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
-						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
+					{
+						if( ! requestPalette.containsKey(request.activityName))
+						{
+							tdColorIndex = (tdColorIndex + 1) % (HTMLUtils.ColorClassedTdOpenTag.values().length - 1);
+							requestPalette.put(request.activityName, HTMLUtils.ColorClassedTdOpenTag.values()[tdColorIndex]);
+						}
+						fullFileOutput.append(requestPalette.get(request.activityName).getHtml()).append(request.activityName).append("</td>");
+					}
 				}
 				else
 					fullFileOutput.append("<td></td>");
@@ -211,7 +229,14 @@ public class OutputGeneratorStrategyHTML implements OutputGeneratorStrategy
 					if(request.activityName.equals(InputStrings.CLOSE_KEY))
 						fullFileOutput.append("<td class='closed'>").append(OutputStrings.CLOSE_KEY).append("</td>");
 					else
-						fullFileOutput.append("<td class='requested'>").append(request.activityName).append("</td>");
+					{
+						if( ! requestPalette.containsKey(request.activityName))
+						{
+							tdColorIndex = (tdColorIndex + 1) % (HTMLUtils.ColorClassedTdOpenTag.values().length - 1);
+							requestPalette.put(request.activityName, HTMLUtils.ColorClassedTdOpenTag.values()[tdColorIndex]);
+						}
+						fullFileOutput.append(requestPalette.get(request.activityName).getHtml()).append(request.activityName).append("</td>");
+					}
 				}
 				else
 					fullFileOutput.append("<td></td>");
