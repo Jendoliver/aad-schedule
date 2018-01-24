@@ -73,6 +73,7 @@ public class App
 		outputGenerator.print(roomSchedules);
 		
 		// Benchmark print
-		System.out.println("\n\n" + requestList.size() + " well-formatted request/s from " + roomSchedules.keySet().size() + " different schedule/s processed in " + (System.currentTimeMillis() - runTimerInit) + "ms");
+		System.out.println("\n\n" + requestList.size() + " well-formatted request/s (out of " +parserRequests.getLoadedRequestsNumber()+ ") from " 
+								+ roomSchedules.keySet().size() + " different schedule/s processed in " + (System.currentTimeMillis() - runTimerInit) + "ms");
 	}
 }

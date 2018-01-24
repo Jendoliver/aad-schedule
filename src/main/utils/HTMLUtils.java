@@ -23,6 +23,30 @@ public class HTMLUtils
 			"        .hourFrame { font-style: oblique; font-weight: bold; }\r\n" + 
 			"        .outOfMonth { background-color: rgba(0, 0, 0, 0.5); }\r\n" + 
 			"        .closed { background-color: lemonchiffon; }\r\n" + 
-			"        .requested { background-color: palegreen; }\r\n" + 
 			"    </style>";
+	
+	public static final String COLORS_CSS = "<style type='text/css'>\r\n" + 
+			"        .indigo { background-color: #9fa8da; }\r\n" + 
+			"        .lightblue { background-color: #4fc3f7; }\r\n" + 
+			"        .cyan { background-color: #4dd0e1; }\r\n" + 
+			"        .teal { background-color: #80cbc4; }\r\n" + 
+			"        .green { background-color: #81c784; }\r\n" + 
+			"        .lightgreen { background-color: #ccff90; }\r\n" + 
+			"        .purple { background-color: #b39ddb; }\r\n" + 
+			"    </style>";
+	
+	public static enum ColorClassedTdOpenTag
+	{
+		INDIGO("<td class='indigo'>"),
+		LIGHTBLUE("<td class='lightblue'>"),
+		CYAN("<td class='cyan'>"),
+		TEAL("<td class='teal'>"),
+		GREEN("<td class='green'>"),
+		LIGHTGREEN("<td class='lightgreen'>"),
+		PURPLE("<td class='purple'>");
+		
+		private String html;
+		private ColorClassedTdOpenTag(String html) { this.html = html; }
+		public String getHtml() { return html; }
+	}
 }
