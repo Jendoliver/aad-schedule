@@ -1,4 +1,5 @@
 *.html
+issues.log
 .metadata
 bin/
 tmp/

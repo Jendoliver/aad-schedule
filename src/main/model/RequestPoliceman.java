@@ -62,6 +62,7 @@ public class RequestPoliceman
 	
 	public void process(RequestList list)
 	{	
+		logger.info("# "+ Configuration.MONTH_TO_PROCESS +"/"+Configuration.YEAR_TO_PROCESS+" activity summary\n");
 		for(Request request : list)
 		{
 			if( ! roomSchedules.containsKey(request.roomName))
@@ -74,23 +75,32 @@ public class RequestPoliceman
 	{
 		// TESTME
 		List<Integer> exactDays = getExactDays(request);
+		int numHoursRequested = 0;
+		int numHoursAccepted = 0;
+		logger.info("# Activity: "+request.activityName);
 		for(int day : exactDays)
 		{
 			for(HourFrame hourFrame : request.hourFrames)
 			{
 				for(int hour = hourFrame.startHour; hour < hourFrame.endHour; hour++)
 				{
+					numHoursRequested++;
 					if(schedule.isEmptyHourFrame(day, hour))
 					{
 						schedule.get(day).put(hour, request);
+						numHoursAccepted++;
 					}
 					else
 					{
-						logger.warn("incompatible request (already reserved)");
+						logger.warn("Room: "+request.roomName+ " "
+								+ "Day: "+day+"/"+Configuration.MONTH_TO_PROCESS+"/"+Configuration.YEAR_TO_PROCESS
+								+ "Hour: "+hour+"-"+(hour+1)
+								+ "Conflict with: " + schedule.getRequest(day, hour).activityName);
 					}
 				}
 			}
 		}
+		logger.info("--------> Total: "+numHoursAccepted+" / "+numHoursRequested+" h assigned (Unassigned: "+(numHoursRequested-numHoursAccepted)+" h)");
 	}
 
 	private List<Integer> getExactDays(Request request)
