@@ -1,6 +1,7 @@
 package view;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.BasicConfigurator;
@@ -40,12 +41,14 @@ public class App
 		parserInternational.parse();
 		
 		// Setup CalendarInfo
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(Locale.US);
+		cal.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		cal.set(Calendar.MONTH, Integer.parseInt(Configuration.MONTH_TO_PROCESS) - 1);
-		cal.set(Calendar.YEAR, Integer.parseInt(Configuration.YEAR_TO_PROCESS));
 		CalendarInfo.MONTH_DAY_NUM = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
 		CalendarInfo.MONTH_WEEKS_NUMBER = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		
 		CalendarInfo.MONTH_FIRST_DAY_OF_WEEK = cal.get(Calendar.DAY_OF_WEEK);
 		CalendarInfo.MONTH_FIRST_WEEK_NUMBER = cal.get(Calendar.WEEK_OF_YEAR);
 		cal.set(Calendar.DAY_OF_MONTH, CalendarInfo.MONTH_DAY_NUM);
