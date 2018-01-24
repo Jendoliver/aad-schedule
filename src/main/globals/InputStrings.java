@@ -4,7 +4,7 @@ import model.RequestDays;
 
 /**
  * This class contains the keywords that might change between languages. Its values are set by model.parsers.ParserInternational when used in input mode.
- * This data is the 003 row at the international.X file. It also contains the extra key 005, @CLOSE_KEY
+ * This data is the 003 row at the international.X file. It also contains the extra key 005, @CLOSE_KEY, which is used to detect the Close event.
  * 
  * It also provides utilities for effectively transforming a parsed request into a Request object
  * 
@@ -42,7 +42,6 @@ public final class InputStrings
 				|| day.equals(SUNDAY);
 	}
 	
-	// TODO check this, as it could cleanly replace the language strategy VVVVVV
 	/**
 	 * This function should be called every time that we read one VALID day (aka previously tested with isValidDay) from a request's day mask
 	 * to transform it into a RequestDays so we can push it into the List<RequestDays> from Request

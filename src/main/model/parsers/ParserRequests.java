@@ -1,6 +1,10 @@
 package model.parsers;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,6 +31,9 @@ import model.RequestList;
 
 public class ParserRequests extends Parser 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ParserRequests.class);
+	
 	private List<String> loadedRequests;
 	private RequestList acceptedRequests = new RequestList();
 
@@ -46,8 +53,7 @@ public class ParserRequests extends Parser
 			try {
 				parse(request);
 			} catch (Exception e) {
-				// TODO log e.getMsg()
-				System.out.print(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 		return acceptedRequests;
@@ -150,7 +156,7 @@ public class ParserRequests extends Parser
 				loadedRequests.add(sCurrentLine);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -234,7 +240,7 @@ public class ParserRequests extends Parser
 		try {
 			toParseInt = Integer.parseInt(toParse);
 		}catch(NumberFormatException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 		return toParseInt;
 	}
@@ -280,7 +286,7 @@ public class ParserRequests extends Parser
 				throw new BadFormattedRequestException(Reason.TOO_MANY_HOUR_FRAMES);
 			}
 		}catch(BadFormattedRequestException ex) {
-			System.out.println(ex.getMessage());
+			logger.error(ex.getMessage());
 			return null;
 		}
 
@@ -294,13 +300,13 @@ public class ParserRequests extends Parser
 				try {
 					hourInt = Integer.parseInt(hour);
 				}catch(NumberFormatException ex) {
-					System.out.println(ex.getMessage());
+					logger.error(ex.getMessage());
 				}
 			}else {
 				throw new BadFormattedRequestException(Reason.HOUR_FORMAT_INCORRECT);
 			}
 		}catch(BadFormattedRequestException ex) {
-			System.out.println(ex.getMessage());
+			logger.error(ex.getMessage());
 		}
 		return hourInt;
 	}
