@@ -24,7 +24,6 @@ import model.parsers.ParserRequests;
  */
 public class App 
 {
-	
 	public static void main(String[] args) 
 	{
 		BasicConfigurator.configure();
