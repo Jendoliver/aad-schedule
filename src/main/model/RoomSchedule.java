@@ -36,6 +36,11 @@ public class RoomSchedule extends HashMap<Integer, Map<Integer, Request>>
 		}
 	}
 	
+	public Request getRequest(int day, int beginningHour)
+	{
+		return get(day) == null ? null : get(day).get(beginningHour);
+	}
+	
 	/**
 	 * Used to determine whether an hour frame on this schedule is empty or not
 	 * 
